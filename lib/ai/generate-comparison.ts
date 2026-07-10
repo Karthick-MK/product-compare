@@ -92,12 +92,14 @@ export async function generateComparison(comparisonId: string): Promise<Generate
   // Map AI response (productIndex) → GeneratedComparison shape (productId)
   return {
     specKeys: aiResponse.specKeys,
-    products: aiResponse.products.map((genProduct) => ({
-      productId: comparison.products[genProduct.productIndex]?.id ?? '',
-      specs: genProduct.specs,
-      pros: genProduct.pros,
-      cons: genProduct.cons,
-    })),
+    products: aiResponse.products
+      .filter(g => comparison.products[g.productIndex] !== undefined)
+      .map(g => ({
+        productId: comparison.products[g.productIndex].id,
+        specs: g.specs,
+        pros: g.pros,
+        cons: g.cons,
+      })),
     verdict: aiResponse.verdict,
   }
 }

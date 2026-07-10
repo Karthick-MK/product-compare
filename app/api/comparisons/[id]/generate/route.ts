@@ -4,7 +4,7 @@ import { checkAiGenerationLimit, incrementAiUsage } from '@/lib/usage/limits'
 import { generateComparison } from '@/lib/ai/generate-comparison'
 import { db } from '@/lib/db/prisma'
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(_: NextRequest, { params }: { params: { id: string } }) {
   try {
     const workspace = await getCurrentWorkspace()
 
@@ -21,6 +21,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     return NextResponse.json({ data: result })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Generation failed'
-    return NextResponse.json({ error: message }, { status: 400 })
+    let status = 400
+    if (message.includes('Unauthorized')) {
+      status = 401
+    } else if (message.includes('limit')) {
+      status = 429
+    }
+    return NextResponse.json({ error: message }, { status })
   }
 }
