@@ -1,0 +1,28 @@
+import type { Product } from '@/types'
+
+interface Props {
+  specKeys: string[]
+  products: Product[]
+}
+
+export function SpecRows({ specKeys, products }: Props) {
+  return (
+    <>
+      {specKeys.map(key => (
+        <tr key={key} className="border-t border-outline-variant hover:bg-surface-high/30 transition-colors">
+          <td className="px-4 py-3 text-xs font-mono text-on-surface-variant uppercase tracking-wider whitespace-nowrap">
+            {key}
+          </td>
+          {products.map(p => {
+            const spec = p.specs?.find(s => s.specKey === key)
+            return (
+              <td key={p.id} className="px-4 py-3 text-sm font-mono text-on-surface text-center">
+                {spec?.specValue ?? '—'}
+              </td>
+            )
+          })}
+        </tr>
+      ))}
+    </>
+  )
+}
