@@ -19,7 +19,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       },
     })
     return NextResponse.json({ data: updated })
-  } catch {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  } catch (error) {
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    if (isAuth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const message = error instanceof Error ? error.message : 'Request failed'
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 }

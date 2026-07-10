@@ -41,8 +41,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const comparison = await getComparison(params.id, workspace.id)
     if (!comparison) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json({ data: comparison })
-  } catch {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  } catch (error) {
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    return NextResponse.json({ error: isAuth ? 'Unauthorized' : 'Internal server error' }, { status: isAuth ? 401 : 500 })
   }
 }
 
@@ -76,7 +77,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
           let productId = p.id
           if (productId) {
-            await tx.product.update({ where: { id: productId }, data: productData })
+            await tx.product.update({ where: { id: productId, comparisonId: params.id }, data: productData })
           } else {
             const created = await tx.product.create({
               data: { ...productData, comparisonId: params.id },
@@ -103,7 +104,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const updated = await getComparison(params.id, workspace.id)
     return NextResponse.json({ data: updated })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Update failed'
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    if (isAuth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const message = error instanceof Error ? error.message : 'Request failed'
     return NextResponse.json({ error: message }, { status: 400 })
   }
 }
@@ -115,7 +118,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     await db.comparison.delete({ where: { id: params.id } })
     return NextResponse.json({ data: { deleted: true } })
-  } catch {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  } catch (error) {
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    return NextResponse.json({ error: isAuth ? 'Unauthorized' : 'Internal server error' }, { status: isAuth ? 401 : 500 })
   }
 }

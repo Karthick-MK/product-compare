@@ -16,8 +16,9 @@ export async function GET() {
       orderBy: { name: 'asc' },
     })
     return NextResponse.json({ data: categories })
-  } catch {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  } catch (error) {
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    return NextResponse.json({ error: isAuth ? 'Unauthorized' : 'Internal server error' }, { status: isAuth ? 401 : 500 })
   }
 }
 
@@ -34,7 +35,9 @@ export async function POST(req: NextRequest) {
     })
     return NextResponse.json({ data: category }, { status: 201 })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Create failed'
+    const isAuth = error instanceof Error && error.message.includes('Unauthorized')
+    if (isAuth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const message = error instanceof Error ? error.message : 'Request failed'
     return NextResponse.json({ error: message }, { status: 400 })
   }
 }
