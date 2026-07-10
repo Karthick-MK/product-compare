@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 import type { Product } from '@/types'
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 async function getComparison(slug: string) {
@@ -27,7 +27,7 @@ async function getComparison(slug: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { slug } = params
   const comparison = await getComparison(slug)
   if (!comparison) return { title: 'Not Found' }
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ComparisonPage({ params }: Props) {
-  const { slug } = await params
+  const { slug } = params
   const comparison = await getComparison(slug)
   if (!comparison) notFound()
 
