@@ -86,7 +86,7 @@ export default function EditComparisonPage() {
         </Button>
         <GenerateButton
           comparisonId={params.id}
-          onGenerated={() => { save().then(load) }}
+          onGenerated={async () => { await save(); await load() }}
         />
       </div>
 

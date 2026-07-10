@@ -57,27 +57,29 @@ export function ProductEntryCard({ index, product, onChange, onRemove }: Props) 
 
       {fetchError && <p className="text-xs text-tertiary">{fetchError}</p>}
 
-      <div className="grid grid-cols-[80px_1fr] gap-3 items-start">
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name ?? 'product'} className="w-20 h-20 object-contain rounded bg-surface-high" />
-        ) : (
-          <div className="w-20 h-20 rounded bg-surface-high flex items-center justify-center text-xs text-on-surface-variant">No image</div>
-        )}
-        <div className="space-y-2">
-          <input
-            value={product.name ?? ''}
-            onChange={e => onChange({ ...product, name: e.target.value })}
-            placeholder="Product name"
-            className="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface focus:outline-none focus:border-primary"
-          />
-          <input
-            value={product.price ?? ''}
-            onChange={e => onChange({ ...product, price: e.target.value })}
-            placeholder="₹2,499"
-            className="w-32 bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
-          />
+      {product.name && (
+        <div className="grid grid-cols-[80px_1fr] gap-3 items-start">
+          {product.imageUrl ? (
+            <img src={product.imageUrl} alt={product.name ?? 'product'} className="w-20 h-20 object-contain rounded bg-surface-high" />
+          ) : (
+            <div className="w-20 h-20 rounded bg-surface-high flex items-center justify-center text-xs text-on-surface-variant">No image</div>
+          )}
+          <div className="space-y-2">
+            <input
+              value={product.name ?? ''}
+              onChange={e => onChange({ ...product, name: e.target.value })}
+              placeholder="Product name"
+              className="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface focus:outline-none focus:border-primary"
+            />
+            <input
+              value={product.price ?? ''}
+              onChange={e => onChange({ ...product, price: e.target.value })}
+              placeholder="₹2,499"
+              className="w-32 bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <input
         value={product.affiliateUrl ?? ''}
