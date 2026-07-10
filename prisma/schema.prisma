@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id              String        @id @default(cuid())
+  ownerUserId     String        @unique
+  slug            String        @unique
+  plan            String        @default("free")
+  customDomain    String?
+  brandingEnabled Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  comparisons     Comparison[]
+  categories      Category[]
+  usage           Usage[]
+}
+
+model Usage {
+  id              String    @id @default(cuid())
+  workspaceId     String
+  month           String    // "2026-07" format
+  aiCalls         Int       @default(0)
+  comparisonCount Int       @default(0)
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, month])
+}
+
+model Category {
+  id              String       @id @default(cuid())
+  workspaceId     String?      // null = system category
+  name            String
+  defaultSpecKeys String[]
+  workspace       Workspace?   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  comparisons     Comparison[]
+}
+
+model Comparison {
+  id          String            @id @default(cuid())
+  workspaceId String
+  categoryId  String
+  title       String
+  slug        String
+  introText   String?
+  status      String            @default("draft")
+  aiVerdict   String?
+  publishedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  workspace   Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  category    Category          @relation(fields: [categoryId], references: [id])
+  products    Product[]
+
+  @@unique([workspaceId, slug])
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  comparisonId String
+  position     Int
+  url          String
+  affiliateUrl String?
+  name         String
+  imageUrl     String?
+  imageSource  String      @default("fetched")
+  price        String?
+  userNotes    String?
+  fetchedRaw   Json?
+  comparison   Comparison  @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
+  specs        Spec[]
+  prosCons     ProsCons[]
+}
+
+model Spec {
+  id        String  @id @default(cuid())
+  productId String
+  specKey   String
+  specValue String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProsCons {
+  id        String  @id @default(cuid())
+  productId String
+  type      String  // "pro" or "con"
+  text      String
+  position  Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
