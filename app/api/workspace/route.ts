@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const workspace = await getCurrentWorkspace()
     return NextResponse.json({ data: workspace })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 }
