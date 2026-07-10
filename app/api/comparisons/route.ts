@@ -34,6 +34,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const input = createSchema.parse(body)
 
+    const cat = await db.category.findFirst({
+      where: {
+        id: input.categoryId,
+        OR: [{ workspaceId: null }, { workspaceId: workspace.id }],
+      },
+    })
+    if (!cat) {
+      return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
+    }
+
     const comparison = await db.$transaction(async (tx) => {
       const created = await tx.comparison.create({
         data: { ...input, workspaceId: workspace.id, status: 'draft' },

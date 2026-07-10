@@ -40,7 +40,17 @@ export async function generateComparison(comparisonId: string): Promise<Generate
   const text = message.content[0].type === 'text' ? message.content[0].text : ''
   if (!text) throw new Error('AI returned empty response')
 
-  const aiResponse = JSON.parse(text) as AIResponse
+  // Strip markdown code fences if model added them despite instructions
+  const cleaned = text
+    .replace(/^```(?:json)?\s*/m, '')
+    .replace(/\s*```\s*$/m, '')
+    .trim()
+
+  if (!cleaned || !cleaned.startsWith('{')) {
+    throw new Error('AI returned invalid JSON response')
+  }
+
+  const aiResponse = JSON.parse(cleaned) as AIResponse
 
   // Persist to DB: clear existing specs/prosCons, write new ones
   await db.$transaction(async (tx) => {

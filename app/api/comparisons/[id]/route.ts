@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { db } from '@/lib/db/prisma'
 import { getCurrentWorkspace } from '@/lib/workspace/current'
+import { getMaxProducts } from '@/lib/usage/limits'
 
 const updateSchema = z.object({
   title: z.string().min(3).max(200).optional(),
@@ -56,6 +57,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const body = await req.json()
     const input = updateSchema.parse(body)
     const { products, ...comparisonFields } = input
+
+    if (products && products.length > getMaxProducts(workspace.plan)) {
+      return NextResponse.json(
+        { error: `Maximum ${getMaxProducts(workspace.plan)} products allowed on your plan` },
+        { status: 400 }
+      )
+    }
 
     await db.$transaction(async (tx) => {
       if (Object.keys(comparisonFields).length > 0) {

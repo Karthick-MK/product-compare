@@ -50,15 +50,6 @@ export async function checkComparisonLimit(workspaceId: string, plan: string): P
   }
 }
 
-export async function incrementComparisonCount(workspaceId: string): Promise<void> {
-  const month = currentMonth()
-  await db.usage.upsert({
-    where: { workspaceId_month: { workspaceId, month } },
-    create: { workspaceId, month, comparisonCount: 1 },
-    update: { comparisonCount: { increment: 1 } },
-  })
-}
-
 export function getMaxProducts(plan: string): number {
   return (PLAN_LIMITS[plan as Plan] ?? PLAN_LIMITS.free).maxProductsPerComparison
 }
