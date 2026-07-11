@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProMatrix | Protein Powder Comparison Matrix</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for high-density tables */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #424754;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#93000a",
+                      "surface-variant": "#2d3449",
+                      "surface-dim": "#0b1326",
+                      "secondary-container": "#00a572",
+                      "tertiary-fixed": "#ffdadb",
+                      "surface-container-high": "#222a3d",
+                      "on-primary": "#002e6a",
+                      "inverse-surface": "#dae2fd",
+                      "primary-container": "#4d8eff",
+                      "on-tertiary-fixed": "#40000d",
+                      "secondary": "#4edea3",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-secondary": "#003824",
+                      "inverse-primary": "#005ac2",
+                      "surface-tint": "#adc6ff",
+                      "on-tertiary-fixed-variant": "#92002a",
+                      "on-tertiary": "#67001b",
+                      "on-secondary-fixed-variant": "#005236",
+                      "primary": "#adc6ff",
+                      "tertiary-container": "#ff516a",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-highest": "#2d3449",
+                      "background": "#0b1326",
+                      "surface-container-low": "#131b2e",
+                      "surface-bright": "#31394d",
+                      "outline": "#8c909f",
+                      "surface-container": "#171f33",
+                      "on-tertiary-container": "#5b0017",
+                      "inverse-on-surface": "#283044",
+                      "on-secondary-container": "#00311f",
+                      "on-error": "#690005",
+                      "tertiary": "#ffb2b7",
+                      "secondary-fixed-dim": "#4edea3",
+                      "on-secondary-fixed": "#002113",
+                      "outline-variant": "#424754",
+                      "secondary-fixed": "#6ffbbe",
+                      "on-background": "#dae2fd",
+                      "surface": "#0b1326",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed-variant": "#004395",
+                      "on-primary-container": "#00285d",
+                      "primary-fixed": "#d8e2ff",
+                      "tertiary-fixed-dim": "#ffb2b7",
+                      "on-primary-fixed": "#001a42",
+                      "surface-container-lowest": "#060e20",
+                      "on-surface": "#dae2fd",
+                      "primary-fixed-dim": "#adc6ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin-desktop": "32px",
+                      "container-max": "1280px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "data-mono": ["JetBrains Mono"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "label-caps": ["JetBrains Mono"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "data-mono": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["10px", {"lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-container border-b border-outline-variant">
+<div class="flex items-center justify-between px-margin-desktop h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">ProMatrix</span>
+<nav class="hidden md:flex items-center space-x-6">
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Whey</a>
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Casein</a>
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Vegan</a>
+<a class="font-body-md text-primary border-b-2 border-primary pb-1" href="#">Isolate</a>
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Blends</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 text-body-sm focus:outline-none focus:border-primary w-64 transition-all" placeholder="Search components..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-body-md hover:bg-surface-tint transition-all">Sign In</button>
+</div>
+</div>
+</header>
+<div class="flex pt-16 h-screen overflow-hidden">
+<!-- SideNavBar / Filters -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-surface-container-low border-r border-outline-variant p-4 flex flex-col space-y-unit overflow-y-auto">
+<div class="mb-6 px-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">FILTERS</span>
+<h2 class="font-headline-md text-headline-md text-secondary mt-1">Refine Comparison</h2>
+<p class="text-body-sm text-on-surface-variant">Optimize your selection</p>
+</div>
+<nav class="space-y-1">
+<div class="p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Filter by Price</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined">nutrition</span>
+<span class="font-body-md">Protein Content</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined">science</span>
+<span class="font-body-md">Source Type</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined">star</span>
+<span class="font-body-md">User Rating</span>
+</div>
+<div class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-body-md">Dietary Needs</span>
+</div>
+</nav>
+<div class="mt-auto pt-6 px-2">
+<button class="w-full bg-surface-variant text-on-surface hover:border-primary border border-transparent transition-all py-3 rounded-lg font-bold text-body-md">
+                    Reset All
+                </button>
+<button class="w-full bg-secondary text-on-secondary mt-2 py-3 rounded-lg font-bold text-body-md hover:brightness-110 active:scale-95 transition-all">
+                    Apply Filter
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 overflow-auto p-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background">Protein Powder Matrix</h1>
+<p class="text-on-surface-variant mt-2 max-w-2xl font-body-md">Side-by-side technical specification comparison for professional-grade performance supplements. High-density data grid optimized for precision choosing.</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface-container-high px-3 py-1.5 rounded text-data-mono font-data-mono text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">history</span> Last Updated: Oct 2023
+                        </span>
+</div>
+</div>
+<!-- Comparison Matrix -->
+<div class="grid grid-cols-5 gap-0 border border-outline-variant rounded-xl overflow-hidden bg-surface-container-low">
+<!-- Labels Column -->
+<div class="col-span-1 bg-surface-container-lowest border-r border-outline-variant">
+<div class="h-[280px] p-6 border-b border-outline-variant flex flex-col justify-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-2">PRODUCT SPECS</span>
+<h3 class="font-headline-md text-headline-md">Key Features</h3>
+</div>
+<div class="h-16 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Protein / Serv</div>
+<div class="h-16 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Calories</div>
+<div class="h-16 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Primary Source</div>
+<div class="h-16 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Amino Profile</div>
+<div class="h-[120px] flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Pros</div>
+<div class="h-[120px] flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Cons</div>
+<div class="h-20 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">User Rating</div>
+<div class="h-20 flex items-center px-6 border-b border-outline-variant text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Price</div>
+<div class="h-24 flex items-center px-6 text-on-surface-variant font-data-mono text-data-mono uppercase tracking-widest">Actions</div>
+</div>
+<!-- Product 1: ProMatrix -->
+<div class="col-span-1 border-r border-outline-variant hover:bg-surface-container transition-colors group">
+<div class="h-[280px] p-4 flex flex-col items-center border-b border-outline-variant relative">
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Top Pick</span>
+</div>
+<div class="w-full h-40 mt-4 mb-4 rounded bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A premium black protein tub with metallic silver typography for ProMatrix brand. The lighting is dramatic and technical, showcasing the clean product design in a dark minimalist studio setting with cyan accent lights reflecting on the lid." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGZdpqKHN8jd9MSshClWwQIk9u2lsREPXGCXbpckjoW6j9FTNU9rW-xXdEXved5fLldRG4T2mk8ux6KZeNWXJeL4a997cuM4a-NydjfqtLpCrfMzif-jy7pvv2bDXyndf-b1_9hxudA8t-RPB54p8KFePxH6AkvKfUCwscjaW6BvGWC7CSecHt0ykkt32XYfTZR3QTk8-WqkX8zFwmbqPKxDCZrlUrqt12eDn4t7lPrU7C11ogZXhg"/>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md leading-tight">ProMatrix Whey Isolate</h4>
+<p class="text-body-sm text-secondary">Pure Technical Grade</p>
+</div>
+</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-primary text-headline-md border-b border-outline-variant">25g</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background border-b border-outline-variant">110</div>
+<div class="h-16 flex items-center justify-center text-body-sm text-on-surface border-b border-outline-variant text-center px-2">Whey Isolate</div>
+<div class="h-16 flex items-center justify-center border-b border-outline-variant">
+<span class="bg-secondary/10 text-secondary px-3 py-1 rounded text-data-mono border border-secondary/30">High (6.5g)</span>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-green-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Fast Absorption</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Zero Lactose</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Low Sodium</li>
+</ul>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-rose-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Premium Price</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Limited Flavors</li>
+</ul>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<div class="flex text-secondary mb-1">
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+</div>
+<span class="text-data-mono text-[11px] text-on-surface-variant">4.9 (2.4k reviews)</span>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<span class="text-headline-md font-data-mono">$1.12<span class="text-body-sm text-on-surface-variant"> /lb</span></span>
+<span class="text-body-sm font-bold text-secondary">$64.99 Total</span>
+</div>
+<div class="h-24 p-4 flex flex-col gap-2">
+<button class="w-full bg-primary text-on-primary py-2 rounded font-bold text-body-sm hover:brightness-110">Add to Cart</button>
+<button class="w-full border border-primary text-primary py-1 rounded text-body-sm hover:bg-primary/10">Compare</button>
+</div>
+</div>
+<!-- Product 2: Gold Standard -->
+<div class="col-span-1 border-r border-outline-variant hover:bg-surface-container transition-colors group">
+<div class="h-[280px] p-4 flex flex-col items-center border-b border-outline-variant">
+<div class="w-full h-40 mt-4 mb-4 rounded bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A classic red and black protein container with gold accents from a famous fitness nutrition brand. Set in a clean, professional warehouse gym environment with cool industrial lighting and high contrast shadows to highlight the structural integrity of the packaging." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN3vZr4zdrKH36hRAYXlkjEx4NQ_K3-RXVNGdMHyQ2_eDZys7EUd-boNfuRcXpDzd9RGSGUluVsCMwMwWFZSm5w6lVv5kLQe2nKIN2LpSRy42eMjbm9pM1-OBZt8xjTkpu3fE8ynnYaYU6m9BT_7rqZsCHx5VZHS0z7RUiVHDIG0subvNoEzsxSldzBA3WaxS4uKFR-ZY2IRzY-oRA00bs64f-C8FYfcibRZIMnNCvzWD8G77df4dp"/>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md leading-tight">Gold Standard Whey</h4>
+<p class="text-body-sm text-on-surface-variant">Industry Baseline</p>
+</div>
+</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background text-headline-md border-b border-outline-variant">24g</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background border-b border-outline-variant">120</div>
+<div class="h-16 flex items-center justify-center text-body-sm text-on-surface border-b border-outline-variant text-center px-2">Whey Blend</div>
+<div class="h-16 flex items-center justify-center border-b border-outline-variant">
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded text-data-mono border border-outline-variant">Med (5.5g)</span>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-green-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> High Mixability</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Value Pricing</li>
+</ul>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-rose-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Contains Soy</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Artificial Sweeteners</li>
+</ul>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<div class="flex text-secondary mb-1">
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined text-[18px]">star_half</span>
+</div>
+<span class="text-data-mono text-[11px] text-on-surface-variant">4.6 (18k reviews)</span>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<span class="text-headline-md font-data-mono">$0.98<span class="text-body-sm text-on-surface-variant"> /lb</span></span>
+<span class="text-body-sm font-bold text-on-background">$49.99 Total</span>
+</div>
+<div class="h-24 p-4 flex flex-col gap-2">
+<button class="w-full bg-surface-variant text-on-surface py-2 rounded font-bold text-body-sm hover:bg-surface-bright">Add to Cart</button>
+<button class="w-full border border-outline text-on-surface-variant py-1 rounded text-body-sm hover:border-primary hover:text-primary">Compare</button>
+</div>
+</div>
+<!-- Product 3: Ghost Whey -->
+<div class="col-span-1 border-r border-outline-variant hover:bg-surface-container transition-colors group">
+<div class="h-[280px] p-4 flex flex-col items-center border-b border-outline-variant">
+<div class="w-full h-40 mt-4 mb-4 rounded bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern lifestyle-focused protein tub with vibrant, playful graphics and high-visibility branding. The product is placed on a sleek white marble countertop in a bright designer kitchen with morning sunlight creating soft gradients. The aesthetic is clean, energetic, and trendy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxKl75YN36HfRbmvR69kiv1-kgwuz4Y4k9Nw0sJhKyg7wc9E2tPSgJVh-wp2lr2TBPOtpZMftqgXZwW7_wGs2eiXOw1qRTFQQ9pZSbFEzsL8Zprp_PVuUXttZ3QNqZUr9YE2Qfo26oKFcP5HnjC9uUN4fVYM2gablTS5q6Rbn96HZ6RVofTOHu0a-RoX9Y9JOUpblCfFUozbb82QfsdwnjPSMertydCyqzif4cZiPKp5wLjwXUZa8l"/>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md leading-tight">Ghost Whey</h4>
+<p class="text-body-sm text-tertiary">Lifestyle Formula</p>
+</div>
+</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background text-headline-md border-b border-outline-variant">25g</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background border-b border-outline-variant">130</div>
+<div class="h-16 flex items-center justify-center text-body-sm text-on-surface border-b border-outline-variant text-center px-2">Isolate/Blend</div>
+<div class="h-16 flex items-center justify-center border-b border-outline-variant">
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded text-data-mono border border-outline-variant">Med (5.2g)</span>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-green-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Superior Taste</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Full Label</li>
+</ul>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-rose-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Low Servings</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> High Calorie</li>
+</ul>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<div class="flex text-secondary mb-1">
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+</div>
+<span class="text-data-mono text-[11px] text-on-surface-variant">4.8 (1.2k reviews)</span>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<span class="text-headline-md font-data-mono">$1.45<span class="text-body-sm text-on-surface-variant"> /lb</span></span>
+<span class="text-body-sm font-bold text-on-background">$44.99 Total</span>
+</div>
+<div class="h-24 p-4 flex flex-col gap-2">
+<button class="w-full bg-surface-variant text-on-surface py-2 rounded font-bold text-body-sm hover:bg-surface-bright">Add to Cart</button>
+<button class="w-full border border-outline text-on-surface-variant py-1 rounded text-body-sm hover:border-primary hover:text-primary">Compare</button>
+</div>
+</div>
+<!-- Product 4: Vegan Plant -->
+<div class="col-span-1 hover:bg-surface-container transition-colors group">
+<div class="h-[280px] p-4 flex flex-col items-center border-b border-outline-variant">
+<div class="w-full h-40 mt-4 mb-4 rounded bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Minimalist eco-friendly protein packaging for a plant-based brand. The tub has a matte earth-tone texture with clean white sans-serif typography. Photographed in a serene, natural-lit studio with a background of soft focus green foliage and light oak wood textures, conveying health and sustainability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgw3PnpA06Is-kODfIeYJMMbMIEzQAVh29WcG-TaHTHhPvu8N_XP8jXXP8xmPsvI_ktuHCk-AVREZp9Y-yVfIyxQPHRoy-HHmNSt0ab5z7RjC0DF-cVIpzY8cwzeNrPTeMVuUloDboNK_NusFKhHiUdf-Ql4vTlqzglSrmE0wrQfh5BKFEgME-pwoc9jHrhBhq94IRRCz-381PeGqdDPk_0IhCNbQSo89PmexGTi7J9MU_YuFmPsE2"/>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md leading-tight">ProPlant Vegan</h4>
+<p class="text-body-sm text-secondary">Sustainable Grade</p>
+</div>
+</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background text-headline-md border-b border-outline-variant">21g</div>
+<div class="h-16 flex items-center justify-center font-data-mono text-on-background border-b border-outline-variant">140</div>
+<div class="h-16 flex items-center justify-center text-body-sm text-on-surface border-b border-outline-variant text-center px-2">Pea/Brown Rice</div>
+<div class="h-16 flex items-center justify-center border-b border-outline-variant">
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded text-data-mono border border-outline-variant">Low (4.0g)</span>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-green-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> No Dairy/Soy</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span> Easy Digest</li>
+</ul>
+</div>
+<div class="h-[120px] p-4 border-b border-outline-variant bg-rose-500/5">
+<ul class="text-body-sm space-y-1">
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Gritty Texture</li>
+<li class="flex items-start gap-1"><span class="material-symbols-outlined text-error text-[16px]">error</span> Lower Protein</li>
+</ul>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<div class="flex text-secondary mb-1">
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined fill-icon text-[18px]">star</span>
+<span class="material-symbols-outlined text-[18px]">star</span>
+</div>
+<span class="text-data-mono text-[11px] text-on-surface-variant">4.3 (850 reviews)</span>
+</div>
+<div class="h-20 flex flex-col items-center justify-center border-b border-outline-variant">
+<span class="text-headline-md font-data-mono">$1.25<span class="text-body-sm text-on-surface-variant"> /lb</span></span>
+<span class="text-body-sm font-bold text-on-background">$39.99 Total</span>
+</div>
+<div class="h-24 p-4 flex flex-col gap-2">
+<button class="w-full bg-surface-variant text-on-surface py-2 rounded font-bold text-body-sm hover:bg-surface-bright">Add to Cart</button>
+<button class="w-full border border-outline text-on-surface-variant py-1 rounded text-body-sm hover:border-primary hover:text-primary">Compare</button>
+</div>
+</div>
+</div>
+<!-- Technical Footer -->
+<footer class="mt-12 pt-8 border-t border-outline-variant text-center space-y-4">
+<div class="flex justify-center gap-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<span class="text-body-sm font-bold uppercase tracking-widest text-on-surface-variant">Third-Party Lab Tested</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">science</span>
+<span class="text-body-sm font-bold uppercase tracking-widest text-on-surface-variant">Pharmaceutical Grade</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">local_shipping</span>
+<span class="text-body-sm font-bold uppercase tracking-widest text-on-surface-variant">Express Fulfillment</span>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant opacity-60">All specifications gathered from primary manufacturer datasets and verified by the ProMatrix Technical Board. Data is provided for informational comparison only.</p>
+</footer>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Hover effect for side nav items
+        const navItems = document.querySelectorAll('aside nav > div');
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if(!item.classList.contains('bg-secondary-container')) {
+                    item.style.borderColor = '#adc6ff';
+                }
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.borderColor = 'transparent';
+            });
+        });
+    </script>
+</body></html>

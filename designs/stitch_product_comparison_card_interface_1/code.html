@@ -1,0 +1,493 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Technical Product Comparison Matrix</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "on-primary-container": "#00285d",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary-container": "#ff516a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "background": "#0b1326",
+                        "secondary-fixed-dim": "#4edea3",
+                        "outline": "#8c909f",
+                        "inverse-surface": "#dae2fd",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-tertiary-container": "#5b0017",
+                        "on-secondary-container": "#00311f",
+                        "surface-container-low": "#131b2e",
+                        "surface-container": "#171f33",
+                        "tertiary-fixed": "#ffdadb",
+                        "secondary": "#4edea3",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary": "#002e6a",
+                        "surface-tint": "#adc6ff",
+                        "on-background": "#dae2fd",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#283044",
+                        "on-tertiary": "#67001b",
+                        "on-secondary": "#003824",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-fixed": "#40000d",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#d8e2ff",
+                        "surface": "#0b1326",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-variant": "#2d3449",
+                        "on-surface": "#dae2fd",
+                        "surface-bright": "#31394d",
+                        "primary": "#adc6ff",
+                        "tertiary": "#ffb2b7",
+                        "on-primary-fixed": "#001a42",
+                        "secondary-container": "#00a572",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "inverse-primary": "#005ac2",
+                        "surface-dim": "#0b1326",
+                        "surface-container-high": "#222a3d",
+                        "primary-container": "#4d8eff",
+                        "outline-variant": "#424754"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "data-mono": ["13px", { "lineHeight": "16px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #0b1326; color: #dae2fd; }
+        .comparison-scroll::-webkit-scrollbar { height: 8px; }
+        .comparison-scroll::-webkit-scrollbar-track { background: #131b2e; }
+        .comparison-scroll::-webkit-scrollbar-thumb { background: #424754; border-radius: 4px; }
+        .pro-chip { border-top: 2px solid #00a572; background: rgba(0, 165, 114, 0.1); }
+        .con-chip { border-top: 2px solid #ff516a; background: rgba(255, 81, 106, 0.1); }
+        .best-choice-glow { box-shadow: 0 0 20px rgba(173, 198, 255, 0.15); border: 1px solid #adc6ff !important; }
+        .material-symbols-outlined { font-size: 18px; vertical-align: middle; }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface-container-low border-b border-outline-variant fixed top-0 w-full z-50">
+<div class="flex justify-between items-center h-16 px-margin-desktop w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">TechCompare</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Comparison</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Guides</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Brands</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Deals</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-high border-none rounded-full px-4 py-1.5 text-body-sm text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary w-64" placeholder="Search tech..." type="text">
+<span class="material-symbols-outlined absolute right-3 top-1.5 text-on-surface-variant" data-icon="search">search</span>
+</div>
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-all duration-200">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-primary">
+<img class="w-full h-full object-cover" data-alt="A professional user profile portrait of a middle-aged tech enthusiast in a clean, modern home office setting. The lighting is bright and technical, highlighting the high-quality textures of the room. The aesthetic is clean and corporate, matching a high-end web platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2JPhiOjVVMfrYTm3C8gCeku2D7iob9Lz1Wb--7i5QC6xWb3RnzBA9TqQBYg_HoYp45n6Jkxdf-v7M7B0vY_7OH1PyI2OeeyT8KqPjRki0e_CBxrfIa95sulFyzIXBevwpibLIk2eMTXawe10c1zWd7hccOeiadbchS8lT4TrRJ8UUuI-l86t65lEioGwY4b4V9haW2YmmK30mug_eWXp55WfdgWdZu22uVB3qsoVKLtKcfZjniQaL">
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-2">
+<span class="font-label-caps text-label-caps text-secondary px-2 py-1 bg-secondary/10 rounded uppercase">Technical Guide</span>
+<span class="text-on-surface-variant text-body-sm">• Updated Oct 2023</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Technical Product Comparison Matrix</h1>
+<p class="text-on-surface-variant max-w-2xl font-body-md">Deep-dive technical analysis of the top-tier adjustable dumbbells for home gym efficiency. Comparing mechanical increments, build integrity, and spatial footprints.</p>
+</div>
+<!-- Comparison Matrix -->
+<div class="comparison-scroll overflow-x-auto pb-4">
+<div class="min-w-[1000px] grid grid-cols-12 border-l border-outline-variant">
+<!-- Headers -->
+<div class="col-span-3 bg-surface-container-lowest p-6 border-y border-r border-outline-variant flex items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Model Specifications</span>
+</div>
+<!-- Model 1 -->
+<div class="col-span-2 bg-surface-container-low p-6 border-y border-r border-outline-variant flex flex-col items-center text-center best-choice-glow relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary font-label-caps text-[9px] px-3 py-1 rounded-full uppercase z-10">Top Pick</div>
+<img class="w-32 h-24 object-contain mb-4" data-alt="High-resolution product photograph of a Flexnest Flexibell adjustable dumbbell. The dumbbell is shown in its cradle on a dark slate surface with clean professional lighting. The design is sleek, black, and compact, showcasing the mechanical adjustment dial and premium iron plates. Professional studio setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ7JG1ZhSRHjgZMQ_9cCjmMeHPv0vAtFTcdkbEOsVbWfhqMfG_YYHfP14fFmCZbt0fbmir-JPI3Zx0KsXpUI2cYqJHVnheduMkPYYsZb8qz1VWkPNkaLkxR2XQMVBckMWN0EgPbbwfx63pXhyRXM9WI8Q5q_BkkcXmNJzBGQKlJFwBT32kVYyXVfA6i8KSiV3gU_hCJv1jWmv7kkd9f7QipLfZnhZcsp1DW9_DXn8JzUIlrqzAizSs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Flexnest Flexibell</h3>
+<p class="text-body-sm text-on-surface-variant">(Single)</p>
+</div>
+<!-- Model 2 -->
+<div class="col-span-2 bg-surface-container-low p-6 border-y border-r border-outline-variant flex flex-col items-center text-center">
+<img class="w-32 h-24 object-contain mb-4" data-alt="Technical product shot of MAXPRO Maxbell adjustable dumbbells in a set of two. Both dumbbells are resting in their matching bases, exhibiting a robust, heavy-duty build quality with black and grey accents. The lighting is cool and technical, emphasizing the industrial design and metallic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeT3pECwOJ3cemh5bVUmGEH-iC1vw0R9pUUzJecr8mdjActEFwcq9Wo7aGR1xxknuZwc3spjqYDqABiBFgwXVf8NAR6E1qX2-4BCZfqK7e0JQZOJXOLE3PVCsmwfgDCorop-8gFaT_VUm-pBQDw6M3SCN_MJxxt38cFcadyNVwmaiXQL6g8h3wpFUx9z5GKzUJJ4F7_su1eqtLTAoHgGmzLrON3wtrMXMVj0FTv8xsdMiO7fKKJSCC">
+<h3 class="font-headline-md text-headline-md text-on-surface">MAXPRO Maxbell</h3>
+<p class="text-body-sm text-on-surface-variant">(Set of 2)</p>
+</div>
+<!-- Model 3 -->
+<div class="col-span-2 bg-surface-container-low p-6 border-y border-r border-outline-variant flex flex-col items-center text-center" id="product-col-slovic">
+<img class="w-32 h-24 object-contain mb-4" data-alt="Close-up professional product image of a Slovic Adjustable Dumbbell set. The dumbbells feature distinctive orange or red highlights on the dial and handle. The setting is a minimalist, modern dark-themed gym. Lighting focuses on the grip texture and the clear weight increment labels." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0L_QxBgx9kT74bn62sfi1MTxg0931y2NU-s4EK7D2-5HsHU1dmxFYVQXq4XFYQT62bTGrl6tQV5e0UCPc_a8mxsYfiDaIIiVVtbPcyFyFeckLz-YFVeuKyS5EAE5qGYtexQQibrFjPlaRU8gyfI2Uz-2qkahLeYVCe20KKz16s4Zpd1Y3uHf5sKSOOi6kw2OcBrRFMu5wgiR9beG0JVA_aiGhXin7n4Q54pc9Fn_E_WomS1C_tnh3">
+<h3 class="font-headline-md text-headline-md text-on-surface">Slovic Pro</h3>
+<p class="text-body-sm text-on-surface-variant">(Set)</p>
+</div>
+<!-- Model 4 -->
+<div class="col-span-3 bg-surface-container-low p-6 border-y border-r border-outline-variant flex flex-col items-center text-center">
+<img class="w-32 h-24 object-contain mb-4" data-alt="Sleek product photography of a BRAINGAIN Adjustable Dumbbell on a professional display stand. The dumbbell shows a sophisticated interlocking plate system. The color palette is deep charcoal and matte black, shot with a cinematic, low-key lighting setup that accentuates its technical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2DBjo1Top4haBY-ifADpCIctj8m2ttbrQdPY2R3Mo2u8DOaKKfNIRS1elyw5OJmkA5riem9bw37e4WqBXJix6McTpDreMqqlG0VagXlqruB1dk3mcTYZTJH2jPG5L-z-d65wuNDzI0BLva5e4GVo08CvjwCVpXAD5xK3mWAvr-YJINZeCCRJ3tF-j5aH1kgqVWLrJ6P5ExNAryabUEYwJVMIUE5u4WNGfs5I8JsdY2wj9LRsb9nn7">
+<h3 class="font-headline-md text-headline-md text-on-surface">BRAINGAIN Gen-X</h3>
+<p class="text-body-sm text-on-surface-variant">(Single)</p>
+</div>
+<!-- Attributes Row: Weight Range -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="weight">weight</span>
+<span class="font-body-md text-on-surface font-medium">Weight Range</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono text-primary">2.5kg - 24kg</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">2.5kg - 24kg</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">2.5kg - 24kg</div>
+<div class="col-span-3 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">2.5kg - 32kg</div>
+<!-- Attributes Row: Increments -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="format_list_numbered">format_list_numbered</span>
+<span class="font-body-md text-on-surface font-medium">Increments</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono text-primary">15 Steps</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">15 Steps</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">15 Steps</div>
+<div class="col-span-3 p-4 border-r border-b border-outline-variant bg-surface-container text-center font-data-mono text-data-mono">12 Steps</div>
+<!-- Attributes Row: Build Material -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="construction">construction</span>
+<span class="font-body-md text-on-surface font-medium">Materials</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center text-body-sm">German Engineered Iron</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center text-body-sm">Reinforced Cast Iron</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center text-body-sm">Composite &amp; Iron</div>
+<div class="col-span-3 p-4 border-r border-b border-outline-variant bg-surface-container text-center text-body-sm">Alloy Steel &amp; Rubber</div>
+<!-- Pros Row -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-on-surface font-medium">Key Pros</span>
+</div>
+<!-- Pros Col 1 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant pro-chip">
+<ul class="space-y-1">
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Extremely Compact
+                        </li>
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Slim Profile
+                        </li>
+</ul>
+</div>
+<!-- Pros Col 2 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant pro-chip">
+<ul class="space-y-1">
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Value for Money
+                        </li>
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Ergonomic Grip
+                        </li>
+</ul>
+</div>
+<!-- Pros Col 3 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant pro-chip">
+<ul class="space-y-1">
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Vibrant Visuals
+                        </li>
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Smooth Shift
+                        </li>
+</ul>
+</div>
+<!-- Pros Col 4 -->
+<div class="col-span-3 p-4 border-r border-b border-outline-variant pro-chip">
+<ul class="space-y-1">
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            Highest Capacity
+                        </li>
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[14px] mt-0.5" data-icon="done">done</span>
+                            All-Steel Logic
+                        </li>
+</ul>
+</div>
+<!-- Cons Row -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="cancel">cancel</span>
+<span class="font-body-md text-on-surface font-medium">Key Cons</span>
+</div>
+<!-- Cons Col 1 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant con-chip">
+<span class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[14px] mt-0.5" data-icon="close">close</span>
+                        Premium Pricing
+                    </span>
+</div>
+<!-- Cons Col 2 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant con-chip">
+<span class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[14px] mt-0.5" data-icon="close">close</span>
+                        Bulkier Base
+                    </span>
+</div>
+<!-- Cons Col 3 -->
+<div class="col-span-2 p-4 border-r border-b border-outline-variant con-chip">
+<span class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[14px] mt-0.5" data-icon="close">close</span>
+                        Plastic Dial parts
+                    </span>
+</div>
+<!-- Cons Col 4 -->
+<div class="col-span-3 p-4 border-r border-b border-outline-variant con-chip">
+<span class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary-container text-[14px] mt-0.5" data-icon="close">close</span>
+                        Heavy footprint
+                    </span>
+</div>
+<!-- Ratings Row -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="star">star</span>
+<span class="font-body-md text-on-surface font-medium">User Rating</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="flex justify-center text-[#fbbf24]">
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant">4.9 (1.2k reviews)</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="flex justify-center text-[#fbbf24]">
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant">4.2 (850 reviews)</span>
+</div>
+<div class="col-span-2 p-4 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="flex justify-center text-[#fbbf24]">
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star_half" style="font-variation-settings: 'FILL' 0.5;">star_half</span>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant">4.6 (420 reviews)</span>
+</div>
+<div class="col-span-3 p-4 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="flex justify-center text-[#fbbf24]">
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant">4.3 (2.1k reviews)</span>
+</div>
+<!-- Price Row -->
+<div class="col-span-3 p-4 bg-surface-container-lowest border-r border-b border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="payments">payments</span>
+<span class="font-body-md text-on-surface font-medium">Unit Price</span>
+</div>
+<div class="col-span-2 p-6 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="text-headline-md text-primary font-headline-md mb-2">$349.00</div>
+<button class="w-full bg-primary text-on-primary py-2 rounded-xl text-label-caps font-bold hover:opacity-90 transition-all scale-95 active:scale-90">View Deal</button>
+</div>
+<div class="col-span-2 p-6 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="text-headline-md text-on-surface font-headline-md mb-2">$599.00</div>
+<button class="w-full border border-primary text-primary py-2 rounded-xl text-label-caps font-bold hover:bg-primary/10 transition-all scale-95 active:scale-90">View Deal</button>
+</div>
+<div class="col-span-2 p-6 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="text-headline-md text-on-surface font-headline-md mb-2">$429.00</div>
+<button class="w-full border border-primary text-primary py-2 rounded-xl text-label-caps font-bold hover:bg-primary/10 transition-all scale-95 active:scale-90">View Deal</button>
+</div>
+<div class="col-span-3 p-6 border-r border-b border-outline-variant bg-surface-container text-center">
+<div class="text-headline-md text-on-surface font-headline-md mb-2">$415.00</div>
+<button class="w-full border border-primary text-primary py-2 rounded-xl text-label-caps font-bold hover:bg-primary/10 transition-all scale-95 active:scale-90">View Deal</button>
+</div>
+</div>
+</div>
+<!-- Sticky Mobile Bottom Nav - Only on Small Screens -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant px-margin-mobile py-2 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-label-caps">COMPARE</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-label-caps">STATS</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="construction">construction</span>
+<span class="text-[10px] font-label-caps">BUILDS</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-[10px] font-label-caps">PRICES</span>
+</button>
+</div>
+<!-- Info Disclaimer -->
+<div class="mt-8 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+<p class="text-body-sm text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="info">info</span>
+                Note: Prices and User Ratings (out of 5 stars) are approximate and may vary based on merchant and regional availability. Last synced 2 hours ago.
+            </p>
+</div>
+</main>
+<!-- Side Sidebar for Comparison Controls (Desktop only) -->
+<aside class="hidden lg:flex fixed right-8 top-24 w-64 flex-col gap-4">
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-4">Matrix Filters</h4>
+<div class="space-y-4">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Display Mode</label>
+<select class="w-full bg-surface-container-highest border-none text-body-sm rounded-lg text-on-surface" id="display-mode-select">
+<option>Full Specs</option>
+<option>Key Differences</option>
+<option>Pros/Cons Only</option>
+</select>
+</div>
+<div class="flex items-center gap-3">
+<input class="rounded bg-surface-container-highest border-outline text-primary focus:ring-0" id="best" type="checkbox">
+<label class="text-body-sm text-on-surface" for="best">Highlight Best Value</label>
+</div>
+<div class="flex items-center gap-3">
+<input checked="" class="rounded bg-surface-container-highest border-outline text-primary focus:ring-0" id="stock" type="checkbox">
+<label class="text-body-sm text-on-surface" for="stock">In-Stock Only</label>
+</div>
+<div><label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Price Range</label><div class="flex gap-2"><input type="text" placeholder="Min" class="w-full bg-surface-container-highest border-none text-body-sm rounded-lg text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary px-3 py-1.5"><input type="text" placeholder="Max" class="w-full bg-surface-container-highest border-none text-body-sm rounded-lg text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary px-3 py-1.5"></div></div><div><label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">User Rating</label><div class="space-y-2"><div class="flex items-center gap-3"><input type="checkbox" id="rating-4" class="rounded bg-surface-container-highest border-outline text-primary focus:ring-0"><label for="rating-4" class="text-body-sm text-on-surface flex items-center gap-1">4+ Stars <span class="material-symbols-outlined text-[#fbbf24] text-[14px] fill">star</span></label></div><div class="flex items-center gap-3"><input type="checkbox" id="rating-3" class="rounded bg-surface-container-highest border-outline text-primary focus:ring-0"><label for="rating-3" class="text-body-sm text-on-surface flex items-center gap-1">3+ Stars <span class="material-symbols-outlined text-[#fbbf24] text-[14px] fill">star</span></label></div></div></div></div>
+<button class="w-full mt-6 bg-primary text-on-primary py-2 rounded-xl font-bold text-label-caps flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95"><span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>Apply Filter</button>
+</div>
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-3">Recently Compared</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="w-10 h-10 bg-surface-container-highest rounded border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small thumbnail of a Bowflex SelectTech 552 adjustable dumbbell, black with red dials, in a studio lighting setup." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0A_sA8E-ftXPBMPxvAMmnaguLxnKyYghc3Gr0hH9OFS-uuYZ3QPYIKhNZmDauE3wCtJumJCT5cSIErdmY04Mvx4dnQgJl2KbPOo6Tcplkj-vNzZzJUjpQZsj3AADaumWa_0hUi3BndQqM3t45fCaAXyUj_CAbE1DjHRJOq5V7mTh0nU2h2euXfareD9VitLrZbAxeu0fhS_E1ksvsD6Evm_5d3QP6vWcKdBF0CCliI3O61_9px7-8">
+</div>
+<div>
+<p class="text-body-sm text-on-surface group-hover:text-primary transition-colors">Bowflex 552</p>
+<p class="text-[10px] font-label-caps text-on-surface-variant">$429.00</p>
+</div>
+</div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="w-10 h-10 bg-surface-container-highest rounded border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small thumbnail of a PowerBlock Elite EXP adjustable dumbbell, square shape with colored selector pin, in professional studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFd4ZNsK_lXq5X3oQgEZvpaydwC83Wz99cWBHuypZu9oPOipNeR20OtsRbTZqRQ-7HfjCg_Q1WoO4JmjiNhcNpbwk8XtyRsKJT_vs0x05XB8QM9Sgi7gyOy2dPh20O3XyCXdhf8d8YRySsm42OJfo188CqsJaqVTNtwK-eg0cOHVjmR4eP9GH5n7esXJV9_6z9eWhGQWECeRjOT-F3G5x71uDzFrmJJEHH951CEnV1aTeZDK0qEaIG">
+</div>
+<div>
+<p class="text-body-sm text-on-surface group-hover:text-primary transition-colors">PowerBlock Elite</p>
+<p class="text-[10px] font-label-caps text-on-surface-variant">$389.00</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Visual Polish: Floating Effect Elements -->
+<div class="fixed top-1/4 -left-64 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+<div class="fixed bottom-1/4 -right-64 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+    </script>
+
+
+<script>
+(function() {
+    const displayMode = document.getElementById('display-mode-select');
+    const bestValueCheckbox = document.getElementById('best');
+    const inStockCheckbox = document.getElementById('stock');
+    const topPickCol = document.querySelector('.best-choice-glow');
+    const slovicCol = document.getElementById('product-col-slovic');
+    const specRows = document.querySelectorAll('.comparison-scroll .grid > div:not(.col-span-3):not(.col-span-2)');
+
+    bestValueCheckbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            topPickCol.style.boxShadow = '0 0 30px rgba(173, 198, 255, 0.4)';
+            topPickCol.style.borderColor = '#adc6ff';
+        } else {
+            topPickCol.style.boxShadow = '';
+            topPickCol.style.borderColor = '';
+        }
+    });
+
+    inStockCheckbox.addEventListener('change', (e) => {
+        if (!e.target.checked) {
+            slovicCol.style.opacity = '0.3';
+            slovicCol.style.filter = 'grayscale(1)';
+        } else {
+            slovicCol.style.opacity = '1';
+            slovicCol.style.filter = 'none';
+        }
+    });
+
+    displayMode.addEventListener('change', (e) => {
+        const grid = document.querySelector('.comparison-scroll .grid');
+        if (e.target.value === 'Pros/Cons Only') {
+            grid.style.opacity = '0.8';
+            // Simulate density change
+            document.querySelectorAll('.comparison-scroll .grid > div').forEach(el => el.style.padding = '8px');
+        } else {
+            grid.style.opacity = '1';
+            document.querySelectorAll('.comparison-scroll .grid > div').forEach(el => el.style.padding = '');
+        }
+    });
+})();
+</script>
+
+</body></html>
