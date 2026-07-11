@@ -1,9 +1,28 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { db } from '@/lib/db/prisma'
 import { buildComparisonPrompt } from './prompts'
 import type { GeneratedComparison } from '@/types'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+// AI_PROVIDER=claude (default) | gemini
+async function callAI(prompt: string): Promise<string> {
+  const provider = process.env.AI_PROVIDER ?? 'claude'
+
+  if (provider === 'gemini') {
+    const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+    const model = genai.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const result = await model.generateContent(prompt)
+    return result.response.text()
+  }
+
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const message = await anthropic.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2048,
+    messages: [{ role: 'user', content: prompt }],
+  })
+  return message.content[0].type === 'text' ? message.content[0].text : ''
+}
 
 // AI response shape uses productIndex (0-based), not productId
 interface AIProduct {
@@ -31,13 +50,7 @@ export async function generateComparison(comparisonId: string): Promise<Generate
     comparison.introText
   )
 
-  const message = await anthropic.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 2048,
-    messages: [{ role: 'user', content: prompt }],
-  })
-
-  const text = message.content[0].type === 'text' ? message.content[0].text : ''
+  const text = await callAI(prompt)
   if (!text) throw new Error('AI returned empty response')
 
   // Strip markdown code fences if model added them despite instructions
