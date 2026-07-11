@@ -10,7 +10,7 @@ async function callAI(prompt: string): Promise<string> {
 
   if (provider === 'gemini') {
     const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-    const model = genai.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genai.getGenerativeModel({ model: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash' })
     const result = await model.generateContent(prompt)
     return result.response.text()
   }
