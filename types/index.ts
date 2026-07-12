@@ -1,5 +1,6 @@
 export type Plan = 'admin' | 'free' | 'pro'
 export type ComparisonStatus = 'draft' | 'published'
+export type PageType = 'comparison' | 'roundup'
 export type ProsConsType = 'pro' | 'con'
 export type ImageSource = 'fetched' | 'uploaded'
 
@@ -28,6 +29,7 @@ export interface Comparison {
   slug: string
   introText: string | null
   status: ComparisonStatus
+  pageType: PageType
   aiVerdict: string | null
   publishedAt: Date | null
   createdAt: Date
@@ -46,6 +48,7 @@ export interface Product {
   imageSource: ImageSource
   price: string | null
   userNotes: string | null
+  shortDescription: string | null
   specs?: Spec[]
   prosCons?: ProsCons[]
 }

@@ -48,6 +48,7 @@ model Comparison {
   slug        String
   introText   String?
   status      String            @default("draft")
+  pageType    String            @default("comparison")
   aiVerdict   String?
   publishedAt DateTime?
   createdAt   DateTime          @default(now())
@@ -70,6 +71,7 @@ model Product {
   imageSource  String      @default("fetched")
   price        String?
   userNotes    String?
+  shortDescription String?
   fetchedRaw   Json?
   comparison   Comparison  @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
   specs        Spec[]
