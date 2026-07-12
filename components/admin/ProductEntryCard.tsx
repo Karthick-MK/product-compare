@@ -71,9 +71,9 @@ export function ProductEntryCard({ index, product, showFetch = true, onChange, o
 
       {fetchError && <p className="text-xs text-tertiary">{fetchError}</p>}
 
-      {/* Name + price always visible (not conditional) */}
+      {/* Name + price */}
       <div className="grid grid-cols-[80px_1fr] gap-3 items-start">
-        <div className="space-y-1">
+        <div className="flex-shrink-0">
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name ?? 'product'} className="w-20 h-20 object-contain rounded bg-surface-high" />
           ) : (
@@ -81,13 +81,6 @@ export function ProductEntryCard({ index, product, showFetch = true, onChange, o
               No image
             </div>
           )}
-          {/* Manual image URL */}
-          <input
-            value={product.imageUrl ?? ''}
-            onChange={e => onChange({ ...product, imageUrl: e.target.value })}
-            placeholder="Paste image URL"
-            className="w-20 bg-surface border border-outline-variant rounded px-1.5 py-1 text-xs text-on-surface focus:outline-none focus:border-primary"
-          />
         </div>
         <div className="space-y-2">
           <input
@@ -105,11 +98,20 @@ export function ProductEntryCard({ index, product, showFetch = true, onChange, o
         </div>
       </div>
 
+      {/* Image URL — full width */}
+      <input
+        value={product.imageUrl ?? ''}
+        onChange={e => onChange({ ...product, imageUrl: e.target.value })}
+        placeholder="Image URL (paste from Amazon or any site)"
+        className="w-full bg-surface border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary"
+      />
+
+      {/* Affiliate URL + rating */}
       <div className="flex gap-2">
         <input
           value={product.affiliateUrl ?? ''}
           onChange={e => onChange({ ...product, affiliateUrl: e.target.value })}
-          placeholder="Affiliate URL (your tracked link)"
+          placeholder="Affiliate URL (your tracked buy link)"
           className="flex-1 bg-surface border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary"
         />
         <input
@@ -117,15 +119,17 @@ export function ProductEntryCard({ index, product, showFetch = true, onChange, o
           min="0" max="5" step="0.1"
           value={product.rating ?? ''}
           onChange={e => onChange({ ...product, rating: e.target.value ? parseFloat(e.target.value) : null })}
-          placeholder="Rating"
-          className="w-20 bg-surface border border-outline-variant rounded px-2 py-1.5 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
+          placeholder="Rating (0-5)"
+          title="User rating out of 5 stars"
+          className="w-24 bg-surface border border-outline-variant rounded px-2 py-1.5 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
         />
         <input
           type="number"
           min="0"
           value={product.reviewCount ?? ''}
           onChange={e => onChange({ ...product, reviewCount: e.target.value ? parseInt(e.target.value) : null })}
-          placeholder="Reviews"
+          placeholder="# reviews"
+          title="Number of user reviews (e.g. 1200)"
           className="w-24 bg-surface border border-outline-variant rounded px-2 py-1.5 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
         />
       </div>
