@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db/prisma'
 import { FilteredComparison } from '@/components/comparison/FilteredComparison'
-import Link from 'next/link'
+import { PublicNav } from '@/components/comparison/PublicNav'
 import { Badge } from '@/components/ui/Badge'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
@@ -43,10 +43,8 @@ export default async function ComparisonPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-surface">
+      <PublicNav title={comparison.title} />
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <Link href="/browse" className="text-xs text-on-surface-variant hover:text-primary transition-colors mb-6 inline-block">
-          ← All comparisons
-        </Link>
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Badge label="Technical Guide" variant="success" />

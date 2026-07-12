@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { PublicNav } from '@/components/comparison/PublicNav'
 import { db } from '@/lib/db/prisma'
 import { RoundupGrid } from '@/components/roundup/RoundupGrid'
 import { AiVerdict } from '@/components/comparison/AiVerdict'
@@ -41,10 +41,8 @@ export default async function RoundupPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-surface">
+      <PublicNav title={roundup.title} />
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <Link href="/browse" className="text-xs text-on-surface-variant hover:text-primary transition-colors mb-6 inline-block">
-          ← All comparisons
-        </Link>
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">

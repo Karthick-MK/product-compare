@@ -36,7 +36,7 @@ export default function NewComparisonPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, categoryId, slug, pageType }),
     })
-    const { data, error: err } = await res.json()
+    const { error: err } = await res.json()
     setLoading(false)
     if (err) { setError(err); return }
     router.push(`/dashboard`)

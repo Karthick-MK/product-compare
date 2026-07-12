@@ -8,6 +8,8 @@ import { InlineEditCell } from '@/components/admin/InlineEditCell'
 import { EditableComparisonTable } from '@/components/admin/EditableComparisonTable'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
+import { EditPageSkeleton } from '@/components/ui/Skeleton'
+import { useToast } from '@/components/ui/Toast'
 import type { Comparison, Product } from '@/types'
 
 export default function EditComparisonPage() {
@@ -33,19 +35,22 @@ export default function EditComparisonPage() {
       body: JSON.stringify({ products }),
     })
     setSaving(false)
-    if (res.ok) await load()
+    if (res.ok) { await load(); toast('Saved') }
+    else toast('Save failed', 'error')
   }
 
   async function togglePublish() {
     const res = await fetch(`/api/comparisons/${params.id}/publish`, { method: 'POST' })
     const { data } = await res.json()
     setComparison(prev => prev ? { ...prev, status: data.status } : prev)
+    toast(data.status === 'published' ? '🎉 Published!' : 'Unpublished')
   }
 
   function addProduct() {
     setProducts(prev => [...prev, { position: prev.length, url: '' }])
   }
 
+  const { toast } = useToast()
   const useAI = process.env.NEXT_PUBLIC_USE_AI !== 'false'
 
   // Show table whenever products have names (manual mode) OR have specs (AI mode)
@@ -57,7 +62,7 @@ export default function EditComparisonPage() {
     ? `/list/${comparison.slug}`
     : `/compare/${comparison?.slug}`
 
-  if (!comparison) return <div className="text-on-surface-variant p-8">Loading...</div>
+  if (!comparison) return <EditPageSkeleton />
 
   return (
     <div className="max-w-5xl space-y-6">
