@@ -18,6 +18,12 @@ export async function POST(_: NextRequest, { params }: { params: { id: string } 
     const result = await generateComparison(params.id)
     await incrementAiUsage(workspace.id)
 
+    // Revert to draft — forces manual review + publish after every generation
+    await db.comparison.update({
+      where: { id: params.id },
+      data: { status: 'draft', publishedAt: null },
+    })
+
     return NextResponse.json({ data: result })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Generation failed'

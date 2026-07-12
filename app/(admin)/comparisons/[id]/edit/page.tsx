@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import { ProductEntryCard } from '@/components/admin/ProductEntryCard'
 import { GenerateButton } from '@/components/admin/GenerateButton'
 import { InlineEditCell } from '@/components/admin/InlineEditCell'
+import { ComparisonTable } from '@/components/comparison/ComparisonTable'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import type { Comparison, Product } from '@/types'
@@ -44,10 +45,20 @@ export default function EditComparisonPage() {
     setProducts(prev => [...prev, { position: prev.length, url: '' }])
   }
 
+  // Products with specs loaded (after generation)
+  const generatedProducts = (comparison?.products ?? []) as Product[]
+  const hasGenerated = generatedProducts.some(p => p.specs && p.specs.length > 0)
+
+  // Public page URL based on page type
+  const publicUrl = comparison?.pageType === 'roundup'
+    ? `/list/${comparison.slug}`
+    : `/compare/${comparison?.slug}`
+
   if (!comparison) return <div className="text-on-surface-variant p-8">Loading...</div>
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="max-w-5xl space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-heading text-2xl font-bold text-on-surface">{comparison.title}</h1>
@@ -55,17 +66,20 @@ export default function EditComparisonPage() {
         </div>
         <div className="flex items-center gap-3">
           <Badge label={comparison.status} variant={comparison.status === 'published' ? 'success' : 'neutral'} />
-          <Button variant="outline" size="sm" onClick={togglePublish}>
-            {comparison.status === 'published' ? 'Unpublish' : 'Publish'}
-          </Button>
+          {hasGenerated && (
+            <Button variant="outline" size="sm" onClick={togglePublish}>
+              {comparison.status === 'published' ? 'Unpublish' : 'Publish'}
+            </Button>
+          )}
           {comparison.status === 'published' && (
-            <a href={`/compare/${comparison.slug}`} target="_blank" rel="noreferrer">
+            <a href={publicUrl} target="_blank" rel="noreferrer">
               <Button variant="ghost" size="sm">View Live →</Button>
             </a>
           )}
         </div>
       </div>
 
+      {/* Products */}
       <section className="space-y-3">
         <h2 className="text-sm font-mono text-on-surface-variant">PRODUCTS</h2>
         {products.map((p, i) => (
@@ -80,6 +94,7 @@ export default function EditComparisonPage() {
         <Button variant="outline" size="sm" onClick={addProduct}>+ Add Product</Button>
       </section>
 
+      {/* Actions */}
       <div className="flex items-center gap-3 pt-2 border-t border-outline-variant">
         <Button variant="outline" onClick={save} disabled={saving}>
           {saving ? 'Saving...' : 'Save'}
@@ -90,22 +105,42 @@ export default function EditComparisonPage() {
         />
       </div>
 
-      {comparison.aiVerdict && (
-        <section className="bg-surface-low border border-outline-variant rounded p-4 space-y-4">
-          <h2 className="text-sm font-mono text-on-surface-variant">AI VERDICT</h2>
-          <InlineEditCell
-            value={comparison.aiVerdict}
-            multiline
-            onSave={async (val) => {
-              await fetch(`/api/comparisons/${params.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ aiVerdict: val }),
-              })
-              setComparison(prev => prev ? { ...prev, aiVerdict: val } : prev)
-            }}
-            className="text-sm text-on-surface"
-          />
+      {/* Generated preview — visible after generation, before publish */}
+      {hasGenerated && (
+        <section className="space-y-4 pt-2">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-mono text-on-surface-variant">PREVIEW</h2>
+            <span className="text-xs text-on-surface-variant">(review before publishing)</span>
+          </div>
+          <ComparisonTable products={generatedProducts} />
+
+          {/* AI Verdict inline edit */}
+          {comparison.aiVerdict && (
+            <div className="bg-surface-low border border-outline-variant rounded p-4 space-y-2">
+              <h3 className="text-xs font-mono text-on-surface-variant">AI VERDICT</h3>
+              <InlineEditCell
+                value={comparison.aiVerdict}
+                multiline
+                onSave={async (val) => {
+                  await fetch(`/api/comparisons/${params.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ aiVerdict: val }),
+                  })
+                  setComparison(prev => prev ? { ...prev, aiVerdict: val } : prev)
+                }}
+                className="text-sm text-on-surface"
+              />
+            </div>
+          )}
+
+          {/* Publish CTA */}
+          {comparison.status === 'draft' && (
+            <div className="flex items-center gap-3 p-4 bg-surface-low border border-outline-variant rounded">
+              <p className="text-sm text-on-surface-variant flex-1">Looks good? Publish to make it live.</p>
+              <Button onClick={togglePublish}>Publish →</Button>
+            </div>
+          )}
         </section>
       )}
     </div>
