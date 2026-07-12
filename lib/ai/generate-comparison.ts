@@ -106,45 +106,43 @@ async function generateComparisonMatrix(comparison: ComparisonWithRelations): Pr
 
   const aiResponse = JSON.parse(cleanJson(text)) as AIComparisonResponse
 
-  await db.$transaction(async (tx) => {
-    for (const genProduct of aiResponse.products) {
-      const product = comparison.products[genProduct.productIndex]
-      if (!product) continue
+  for (const genProduct of aiResponse.products) {
+    const product = comparison.products[genProduct.productIndex]
+    if (!product) continue
 
-      await tx.spec.deleteMany({ where: { productId: product.id } })
-      await tx.prosCons.deleteMany({ where: { productId: product.id } })
+    await db.spec.deleteMany({ where: { productId: product.id } })
+    await db.prosCons.deleteMany({ where: { productId: product.id } })
 
-      await tx.spec.createMany({
-        data: aiResponse.specKeys.map((key) => ({
-          productId: product.id,
-          specKey: key,
-          specValue: genProduct.specs[key] ?? 'N/A',
-        })),
-      })
-
-      await tx.prosCons.createMany({
-        data: genProduct.pros.map((text, i) => ({
-          productId: product.id,
-          type: 'pro',
-          text,
-          position: i,
-        })),
-      })
-
-      await tx.prosCons.createMany({
-        data: genProduct.cons.map((text, i) => ({
-          productId: product.id,
-          type: 'con',
-          text,
-          position: i,
-        })),
-      })
-    }
-
-    await tx.comparison.update({
-      where: { id: comparison.id },
-      data: { aiVerdict: aiResponse.verdict },
+    await db.spec.createMany({
+      data: aiResponse.specKeys.map((key) => ({
+        productId: product.id,
+        specKey: key,
+        specValue: genProduct.specs[key] ?? 'N/A',
+      })),
     })
+
+    await db.prosCons.createMany({
+      data: genProduct.pros.map((text, i) => ({
+        productId: product.id,
+        type: 'pro',
+        text,
+        position: i,
+      })),
+    })
+
+    await db.prosCons.createMany({
+      data: genProduct.cons.map((text, i) => ({
+        productId: product.id,
+        type: 'con',
+        text,
+        position: i,
+      })),
+    })
+  }
+
+  await db.comparison.update({
+    where: { id: comparison.id },
+    data: { aiVerdict: aiResponse.verdict },
   })
 
   return {
@@ -172,35 +170,30 @@ async function generateRoundup(comparison: ComparisonWithRelations): Promise<Gen
 
   const aiResponse = JSON.parse(cleanJson(text)) as AIRoundupResponse
 
-  await db.$transaction(async (tx) => {
-    for (const genProduct of aiResponse.products) {
-      const product = comparison.products[genProduct.productIndex]
-      if (!product) continue
+  for (const genProduct of aiResponse.products) {
+    const product = comparison.products[genProduct.productIndex]
+    if (!product) continue
 
-      // Clear old data
-      await tx.prosCons.deleteMany({ where: { productId: product.id } })
+    await db.prosCons.deleteMany({ where: { productId: product.id } })
 
-      // Write shortDescription
-      await tx.product.update({
-        where: { id: product.id },
-        data: { shortDescription: genProduct.shortDescription },
-      })
-
-      // Write highlights as pros (exactly 3)
-      await tx.prosCons.createMany({
-        data: genProduct.highlights.slice(0, 3).map((text, i) => ({
-          productId: product.id,
-          type: 'pro',
-          text,
-          position: i,
-        })),
-      })
-    }
-
-    await tx.comparison.update({
-      where: { id: comparison.id },
-      data: { aiVerdict: aiResponse.verdict },
+    await db.product.update({
+      where: { id: product.id },
+      data: { shortDescription: genProduct.shortDescription },
     })
+
+    await db.prosCons.createMany({
+      data: genProduct.highlights.slice(0, 3).map((text, i) => ({
+        productId: product.id,
+        type: 'pro',
+        text,
+        position: i,
+      })),
+    })
+  }
+
+  await db.comparison.update({
+    where: { id: comparison.id },
+    data: { aiVerdict: aiResponse.verdict },
   })
 
   // Return GeneratedComparison shape (specKeys empty for roundup)
