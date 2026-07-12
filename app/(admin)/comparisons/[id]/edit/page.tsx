@@ -66,11 +66,9 @@ export default function EditComparisonPage() {
         </div>
         <div className="flex items-center gap-3">
           <Badge label={comparison.status} variant={comparison.status === 'published' ? 'success' : 'neutral'} />
-          {hasGenerated && (
-            <Button variant="outline" size="sm" onClick={togglePublish}>
-              {comparison.status === 'published' ? 'Unpublish' : 'Publish'}
-            </Button>
-          )}
+          <Button variant="outline" size="sm" onClick={togglePublish}>
+            {comparison.status === 'published' ? 'Unpublish' : 'Publish'}
+          </Button>
           {comparison.status === 'published' && (
             <a href={publicUrl} target="_blank" rel="noreferrer">
               <Button variant="ghost" size="sm">View Live →</Button>
