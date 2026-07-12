@@ -16,7 +16,7 @@ export function SpecRows({ specKeys, products }: Props) {
           {products.map(p => {
             const spec = p.specs?.find(s => s.specKey === key)
             return (
-              <td key={p.id} className="px-4 py-3 text-sm font-mono text-on-surface text-center">
+              <td key={p.id} className="px-4 py-3 text-sm font-mono text-on-surface text-center border-l border-outline-variant">
                 {spec?.specValue ?? '—'}
               </td>
             )

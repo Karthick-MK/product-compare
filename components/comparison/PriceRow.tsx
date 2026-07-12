@@ -11,7 +11,7 @@ export function PriceRow({ products }: Props) {
         UNIT PRICE
       </td>
       {products.map(p => (
-        <td key={p.id} className="px-4 py-4 text-center">
+        <td key={p.id} className="px-4 py-4 text-center border-l border-outline-variant">
           <div className="space-y-2">
             <p className="font-heading font-bold text-lg text-on-surface">{p.price ?? '—'}</p>
             {p.affiliateUrl ? (
