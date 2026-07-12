@@ -34,6 +34,11 @@ export default async function DashboardPage() {
                 <h2 className="font-heading font-semibold text-on-surface">{c.title}</h2>
                 <p className="text-sm text-on-surface-variant mt-0.5">
                   {c.category.name} · {c.products.length} products
+                  {c.pageType === 'roundup' && (
+                    <span className="ml-2 text-xs font-mono bg-primary/10 text-primary border border-primary/30 rounded px-1.5 py-0.5">
+                      ROUNDUP
+                    </span>
+                  )}
                 </p>
               </div>
               <div className="flex items-center gap-3">

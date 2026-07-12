@@ -11,6 +11,7 @@ export default function NewComparisonPage() {
   const [title, setTitle] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [slug, setSlug] = useState('')
+  const [pageType, setPageType] = useState<'comparison' | 'roundup'>('comparison')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -33,7 +34,7 @@ export default function NewComparisonPage() {
     const res = await fetch('/api/comparisons', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, categoryId, slug }),
+      body: JSON.stringify({ title, categoryId, slug, pageType }),
     })
     const { data, error: err } = await res.json()
     setLoading(false)
@@ -76,6 +77,25 @@ export default function NewComparisonPage() {
             className="w-full bg-surface-low border border-outline-variant rounded px-3 py-2 text-on-surface text-sm font-mono focus:outline-none focus:border-primary"
           />
           <p className="text-xs text-on-surface-variant mt-1">/compare/{slug || '...'}</p>
+        </div>
+        <div>
+          <label className="block text-sm font-mono text-on-surface-variant mb-2">TYPE</label>
+          <div className="flex gap-3">
+            {(['comparison', 'roundup'] as const).map(type => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setPageType(type)}
+                className={`px-4 py-2 rounded text-sm font-mono border transition-colors ${
+                  pageType === type
+                    ? 'border-primary text-primary bg-primary/10'
+                    : 'border-outline-variant text-on-surface-variant hover:border-primary/50'
+                }`}
+              >
+                {type === 'comparison' ? 'Comparison' : 'Roundup / Top-N'}
+              </button>
+            ))}
+          </div>
         </div>
         {error && <p className="text-sm text-tertiary">{error}</p>}
         <Button type="submit" disabled={loading} className="w-full">

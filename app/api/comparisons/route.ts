@@ -9,6 +9,7 @@ const createSchema = z.object({
   categoryId: z.string(),
   slug: z.string().min(3).max(100).regex(/^[a-z0-9-]+$/),
   introText: z.string().optional(),
+  pageType: z.enum(['comparison', 'roundup']).default('comparison'),
 })
 
 export async function GET() {
