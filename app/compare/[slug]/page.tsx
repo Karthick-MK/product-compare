@@ -12,7 +12,7 @@ interface Props {
 
 async function getComparison(slug: string) {
   return db.comparison.findFirst({
-    where: { slug, status: 'published' },
+    where: { slug, status: 'published', pageType: 'comparison' },
     include: {
       category: true,
       products: {

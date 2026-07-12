@@ -3,6 +3,7 @@ import { db } from '@/lib/db/prisma'
 import { RoundupGrid } from '@/components/roundup/RoundupGrid'
 import { AiVerdict } from '@/components/comparison/AiVerdict'
 import { Badge } from '@/components/ui/Badge'
+import { cache } from 'react'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
 
@@ -10,7 +11,7 @@ interface Props {
   params: { slug: string }
 }
 
-async function getRoundup(slug: string) {
+const getRoundup = cache(async (slug: string) => {
   return db.comparison.findFirst({
     where: { slug, status: 'published', pageType: 'roundup' },
     include: {
@@ -22,7 +23,7 @@ async function getRoundup(slug: string) {
       },
     },
   })
-}
+})
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const roundup = await getRoundup(params.slug)
