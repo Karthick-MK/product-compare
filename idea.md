@@ -64,6 +64,7 @@ I can maully input for each product.
 
 6. Need to give drag and drop or Admin to choose top pick
 
+create a comparision should take to dashboard
 
 7. Dont auto save
 8. List of what we published should be given for users website so taht they can browse other lists too. Bu time order.

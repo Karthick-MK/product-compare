@@ -27,12 +27,13 @@ export default function EditComparisonPage() {
 
   async function save() {
     setSaving(true)
-    await fetch(`/api/comparisons/${params.id}`, {
+    const res = await fetch(`/api/comparisons/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ products }),
     })
     setSaving(false)
+    if (res.ok) await load()
   }
 
   async function togglePublish() {
