@@ -136,20 +136,25 @@ export default function EditComparisonPage() {
             </div>
           )}
 
-          {/* Sticky publish bar — stays visible while editing table */}
+          {/* Sticky publish bar */}
           <div className="sticky bottom-4 flex items-center gap-3 p-4 bg-surface-high border border-outline-variant rounded-lg shadow-lg">
             <Badge label={comparison.status} variant={comparison.status === 'published' ? 'success' : 'neutral'} />
             <p className="text-sm text-on-surface-variant flex-1">
-              {comparison.status === 'draft' ? 'Done editing? Publish to make it live.' : 'Published. Regenerate to update, or unpublish.'}
+              {comparison.status === 'draft' ? 'Edits saved. Publish when ready.' : 'Live. Edits save automatically.'}
             </p>
-            <Button onClick={togglePublish} variant={comparison.status === 'published' ? 'outline' : 'primary'}>
-              {comparison.status === 'published' ? 'Unpublish' : 'Publish →'}
-            </Button>
             {comparison.status === 'published' && (
               <a href={publicUrl} target="_blank" rel="noreferrer">
                 <Button variant="ghost" size="sm">View Live →</Button>
               </a>
             )}
+            {comparison.status === 'published' && (
+              <button onClick={togglePublish} className="text-xs text-on-surface-variant hover:text-tertiary transition-colors">
+                Unpublish
+              </button>
+            )}
+            <Button onClick={togglePublish}>
+              {comparison.status === 'published' ? 'Re-publish' : 'Publish →'}
+            </Button>
           </div>
         </section>
       )}

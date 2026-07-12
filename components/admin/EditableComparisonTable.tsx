@@ -13,6 +13,7 @@ interface Props {
 export function EditableComparisonTable({ products, comparisonId, onSaved }: Props) {
   const [local, setLocal] = useState<Product[]>(products)
   const [saving, setSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<string | null>(null)
 
   const specKeys = local[0]?.specs?.map(s => s.specKey) ?? []
 
@@ -24,6 +25,7 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
       body: JSON.stringify({ products: updated }),
     })
     setSaving(false)
+    setLastSaved(new Date().toLocaleTimeString())
     onSaved()
   }
 
@@ -53,9 +55,10 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
 
   return (
     <div className="space-y-1">
-      {saving && (
-        <p className="text-xs text-on-surface-variant text-right">Saving...</p>
-      )}
+      <div className="flex justify-end h-4">
+        {saving && <p className="text-xs text-on-surface-variant">Saving...</p>}
+        {!saving && lastSaved && <p className="text-xs text-secondary">✓ Saved at {lastSaved}</p>}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full border border-outline-variant rounded-lg overflow-hidden text-sm">
           <colgroup>
