@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { ProductEntryCard } from '@/components/admin/ProductEntryCard'
 import { GenerateButton } from '@/components/admin/GenerateButton'
 import { InlineEditCell } from '@/components/admin/InlineEditCell'
-import { ComparisonTable } from '@/components/comparison/ComparisonTable'
+import { EditableComparisonTable } from '@/components/admin/EditableComparisonTable'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import type { Comparison, Product } from '@/types'
@@ -112,7 +112,11 @@ export default function EditComparisonPage() {
             <h2 className="text-sm font-mono text-on-surface-variant">PREVIEW</h2>
             <span className="text-xs text-on-surface-variant">(review before publishing)</span>
           </div>
-          <ComparisonTable products={generatedProducts} />
+          <EditableComparisonTable
+            products={generatedProducts}
+            comparisonId={params.id}
+            onSaved={load}
+          />
 
           {/* AI Verdict inline edit */}
           {comparison.aiVerdict && (
