@@ -136,13 +136,21 @@ export default function EditComparisonPage() {
             </div>
           )}
 
-          {/* Publish CTA */}
-          {comparison.status === 'draft' && (
-            <div className="flex items-center gap-3 p-4 bg-surface-low border border-outline-variant rounded">
-              <p className="text-sm text-on-surface-variant flex-1">Looks good? Publish to make it live.</p>
-              <Button onClick={togglePublish}>Publish →</Button>
-            </div>
-          )}
+          {/* Sticky publish bar — stays visible while editing table */}
+          <div className="sticky bottom-4 flex items-center gap-3 p-4 bg-surface-high border border-outline-variant rounded-lg shadow-lg">
+            <Badge label={comparison.status} variant={comparison.status === 'published' ? 'success' : 'neutral'} />
+            <p className="text-sm text-on-surface-variant flex-1">
+              {comparison.status === 'draft' ? 'Done editing? Publish to make it live.' : 'Published. Regenerate to update, or unpublish.'}
+            </p>
+            <Button onClick={togglePublish} variant={comparison.status === 'published' ? 'outline' : 'primary'}>
+              {comparison.status === 'published' ? 'Unpublish' : 'Publish →'}
+            </Button>
+            {comparison.status === 'published' && (
+              <a href={publicUrl} target="_blank" rel="noreferrer">
+                <Button variant="ghost" size="sm">View Live →</Button>
+              </a>
+            )}
+          </div>
         </section>
       )}
     </div>
