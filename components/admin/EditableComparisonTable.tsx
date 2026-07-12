@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { InlineEditCell } from './InlineEditCell'
-import type { Product, Spec, ProsCons } from '@/types'
+import type { Product } from '@/types'
 
 interface Props {
   products: Product[]
@@ -146,6 +146,24 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
                       </li>
                     ))}
                   </ul>
+                </td>
+              ))}
+            </tr>
+
+            {/* Rating row */}
+            <tr className="border-t border-outline-variant">
+              <td className="px-3 py-2 text-xs font-mono text-on-surface-variant">RATING</td>
+              {local.map(p => (
+                <td key={p.id} className="px-3 py-2 border-l border-outline-variant">
+                  {p.rating ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-yellow-400 text-sm">{'★'.repeat(Math.round(p.rating))}{'☆'.repeat(5 - Math.round(p.rating))}</span>
+                      <span className="text-xs font-mono text-on-surface">{p.rating.toFixed(1)}</span>
+                      {p.reviewCount && <span className="text-xs text-on-surface-variant">({p.reviewCount.toLocaleString()})</span>}
+                    </div>
+                  ) : (
+                    <span className="text-xs text-on-surface-variant">No rating</span>
+                  )}
                 </td>
               ))}
             </tr>

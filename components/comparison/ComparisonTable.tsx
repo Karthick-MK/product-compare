@@ -2,6 +2,7 @@ import { ProductHeader } from './ProductHeader'
 import { SpecRows } from './SpecRows'
 import { ProsConsRow } from './ProsConsRow'
 import { PriceRow } from './PriceRow'
+import { StarRating } from '@/components/ui/StarRating'
 import type { Product } from '@/types'
 
 interface Props {
@@ -36,6 +37,17 @@ export function ComparisonTable({ products }: Props) {
             <SpecRows specKeys={specKeys} products={products} />
             <ProsConsRow type="pro" products={products} />
             <ProsConsRow type="con" products={products} />
+            {/* Rating row */}
+            <tr className="border-t border-outline-variant">
+              <td className="px-4 py-3 text-xs font-mono text-on-surface-variant uppercase">User Rating</td>
+              {products.map(p => (
+                <td key={p.id} className="px-4 py-3 text-center border-l border-outline-variant">
+                  {p.rating
+                    ? <StarRating rating={p.rating} reviewCount={p.reviewCount ?? undefined} />
+                    : <span className="text-xs text-on-surface-variant">—</span>}
+                </td>
+              ))}
+            </tr>
             <PriceRow products={products} />
           </tbody>
         </table>
@@ -78,6 +90,7 @@ export function ComparisonTable({ products }: Props) {
               </div>
             </div>
             <div className="px-4 pb-4">
+              {p.rating && <div className="mb-2"><StarRating rating={p.rating} reviewCount={p.reviewCount ?? undefined} /></div>}
               <p className="font-heading font-bold text-xl text-on-surface mb-2">{p.price ?? '—'}</p>
               {p.affiliateUrl && (
                 <a href={p.affiliateUrl} target="_blank" rel="noopener noreferrer"

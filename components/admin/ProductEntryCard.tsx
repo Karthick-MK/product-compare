@@ -91,12 +91,30 @@ export function ProductEntryCard({ index, product, onChange, onRemove }: Props) 
         </div>
       </div>
 
-      <input
-        value={product.affiliateUrl ?? ''}
-        onChange={e => onChange({ ...product, affiliateUrl: e.target.value })}
-        placeholder="Affiliate URL (your tracked link)"
-        className="w-full bg-surface border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary"
-      />
+      <div className="flex gap-2">
+        <input
+          value={product.affiliateUrl ?? ''}
+          onChange={e => onChange({ ...product, affiliateUrl: e.target.value })}
+          placeholder="Affiliate URL (your tracked link)"
+          className="flex-1 bg-surface border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary"
+        />
+        <input
+          type="number"
+          min="0" max="5" step="0.1"
+          value={product.rating ?? ''}
+          onChange={e => onChange({ ...product, rating: e.target.value ? parseFloat(e.target.value) : null })}
+          placeholder="Rating"
+          className="w-20 bg-surface border border-outline-variant rounded px-2 py-1.5 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
+        />
+        <input
+          type="number"
+          min="0"
+          value={product.reviewCount ?? ''}
+          onChange={e => onChange({ ...product, reviewCount: e.target.value ? parseInt(e.target.value) : null })}
+          placeholder="Reviews"
+          className="w-24 bg-surface border border-outline-variant rounded px-2 py-1.5 text-sm text-on-surface font-mono focus:outline-none focus:border-primary"
+        />
+      </div>
 
       <textarea
         value={product.userNotes ?? ''}

@@ -27,8 +27,9 @@ export async function fetchProductFromUrl(url: string): Promise<FetchedProductDa
   const name = (h1Match?.[1] ?? boldMatch?.[1] ?? firstLine ?? 'Unknown Product').trim()
 
   // Image: first real image URL (skip tiny icons < 50 chars)
-  const imageMatches = [...markdown.matchAll(/!\[.*?\]\((https?:\/\/[^\s)]{30,})\)/g)]
-  const imageUrl = imageMatches[0]?.[1] ?? null
+  const imageRegex = /!\[.*?\]\((https?:\/\/[^\s)]{30,})\)/g
+  const firstImageMatch = imageRegex.exec(markdown)
+  const imageUrl = firstImageMatch?.[1] ?? null
 
   // Price: handles ₹, $, £, €, Rs — with optional commas
   const priceMatch = markdown.match(/(?:Rs\.?\s*|₹\s*|MRP\s*:?\s*[₹]?\s*)[\d,]+(?:\.\d{2})?|[₹$£€][\d,]+(?:\.\d{2})?/)

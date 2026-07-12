@@ -72,6 +72,8 @@ model Product {
   price        String?
   userNotes    String?
   shortDescription String?
+  rating       Float?
+  reviewCount  Int?
   fetchedRaw   Json?
   comparison   Comparison  @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
   specs        Spec[]

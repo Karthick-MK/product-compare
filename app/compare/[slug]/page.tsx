@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db/prisma'
-import { ComparisonTable } from '@/components/comparison/ComparisonTable'
-import { AiVerdict } from '@/components/comparison/AiVerdict'
+import { FilteredComparison } from '@/components/comparison/FilteredComparison'
 import { Badge } from '@/components/ui/Badge'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
@@ -59,9 +58,10 @@ export default async function ComparisonPage({ params }: Props) {
           )}
         </div>
 
-        <ComparisonTable products={comparison.products as unknown as Product[]} />
-
-        {comparison.aiVerdict && <AiVerdict verdict={comparison.aiVerdict} />}
+        <FilteredComparison
+          products={comparison.products as unknown as Product[]}
+          aiVerdict={comparison.aiVerdict}
+        />
 
         <p className="mt-6 text-xs text-on-surface-variant text-center">
           Prices and ratings are approximate and may vary by region. Last updated{' '}
