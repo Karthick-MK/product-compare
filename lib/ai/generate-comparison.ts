@@ -13,7 +13,7 @@ async function callAI(prompt: string): Promise<string> {
   if (provider === 'groq') {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
     const completion = await groq.chat.completions.create({
-      model: process.env.GROQ_MODEL ?? 'llama-3.1-70b-versatile',
+      model: process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 2048,
     })
