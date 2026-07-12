@@ -1,13 +1,24 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { db } from '@/lib/db/prisma'
 import { buildComparisonPrompt } from './prompts'
 import { buildRoundupPrompt } from './roundup-prompts'
 import type { GeneratedComparison } from '@/types'
 
-// AI_PROVIDER=claude (default) | gemini
+// AI_PROVIDER=groq (free, no card) | gemini | claude
 async function callAI(prompt: string): Promise<string> {
   const provider = process.env.AI_PROVIDER ?? 'claude'
+
+  if (provider === 'groq') {
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL ?? 'llama-3.1-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 2048,
+    })
+    return completion.choices[0]?.message?.content ?? ''
+  }
 
   if (provider === 'gemini') {
     const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
