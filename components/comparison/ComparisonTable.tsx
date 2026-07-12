@@ -27,7 +27,7 @@ export function ComparisonTable({ products }: Props) {
                 MODEL SPECIFICATIONS
               </th>
               {products.map((p, i) => (
-                <th key={p.id} className="border-l border-outline-variant">
+                <th key={p.id} className="border-l border-outline-variant overflow-visible pt-6">
                   <ProductHeader product={p} isTopPick={i === 0} />
                 </th>
               ))}
