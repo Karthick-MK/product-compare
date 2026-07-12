@@ -46,9 +46,11 @@ export default function EditComparisonPage() {
     setProducts(prev => [...prev, { position: prev.length, url: '' }])
   }
 
-  // Products with specs loaded (after generation)
+  const useAI = process.env.NEXT_PUBLIC_USE_AI !== 'false'
+
+  // Show table whenever products have names (manual mode) OR have specs (AI mode)
   const generatedProducts = (comparison?.products ?? []) as Product[]
-  const hasGenerated = generatedProducts.some(p => p.specs && p.specs.length > 0)
+  const hasGenerated = generatedProducts.some(p => p.name && p.name.length > 0)
 
   // Public page URL based on page type
   const publicUrl = comparison?.pageType === 'roundup'
@@ -104,6 +106,7 @@ export default function EditComparisonPage() {
             key={i}
             index={i}
             product={p}
+            showFetch={useAI}
             onChange={updated => setProducts(prev => prev.map((item, idx) => idx === i ? updated : item))}
             onRemove={() => setProducts(prev => prev.filter((_, idx) => idx !== i))}
           />
@@ -116,10 +119,15 @@ export default function EditComparisonPage() {
         <Button variant="outline" onClick={save} disabled={saving}>
           {saving ? 'Saving...' : 'Save'}
         </Button>
-        <GenerateButton
-          comparisonId={params.id}
-          onGenerated={async () => { await save(); await load() }}
-        />
+        {useAI && (
+          <GenerateButton
+            comparisonId={params.id}
+            onGenerated={async () => { await save(); await load() }}
+          />
+        )}
+        {!useAI && (
+          <span className="text-xs text-on-surface-variant">Save to see comparison table below</span>
+        )}
       </div>
 
       {/* Generated preview — visible after generation, before publish */}

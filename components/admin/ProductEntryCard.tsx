@@ -7,11 +7,12 @@ import type { Product, FetchedProductData } from '@/types'
 interface Props {
   index: number
   product: Partial<Product>
+  showFetch?: boolean
   onChange: (updated: Partial<Product>) => void
   onRemove: () => void
 }
 
-export function ProductEntryCard({ index, product, onChange, onRemove }: Props) {
+export function ProductEntryCard({ index, product, showFetch = true, onChange, onRemove }: Props) {
   const [fetching, setFetching] = useState(false)
   const [fetchError, setFetchError] = useState('')
 
@@ -58,12 +59,14 @@ export function ProductEntryCard({ index, product, onChange, onRemove }: Props) 
         <input
           value={product.url ?? ''}
           onChange={e => onChange({ ...product, url: e.target.value })}
-          placeholder="https://amazon.in/dp/..."
+          placeholder={showFetch ? 'https://amazon.in/dp/... (paste to fetch)' : 'Product URL or store link'}
           className="flex-1 bg-surface border border-outline-variant rounded px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary"
         />
-        <Button size="sm" variant="outline" onClick={fetchUrl} disabled={fetching || !product.url}>
-          {fetching ? '...' : 'Fetch'}
-        </Button>
+        {showFetch && (
+          <Button size="sm" variant="outline" onClick={fetchUrl} disabled={fetching || !product.url}>
+            {fetching ? '...' : 'Fetch'}
+          </Button>
+        )}
       </div>
 
       {fetchError && <p className="text-xs text-tertiary">{fetchError}</p>}
