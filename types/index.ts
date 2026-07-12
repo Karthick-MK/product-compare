@@ -49,6 +49,7 @@ export interface Product {
   price: string | null
   userNotes: string | null
   shortDescription: string | null
+  isTopPick: boolean
   rating: number | null
   reviewCount: number | null
   specs?: Spec[]

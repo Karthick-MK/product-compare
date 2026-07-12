@@ -6,12 +6,14 @@ export default function Home() {
       {/* Nav */}
       <nav className="border-b border-outline-variant px-6 py-4 flex items-center justify-between max-w-6xl mx-auto">
         <span className="font-heading font-bold text-xl text-on-surface">CompareIt</span>
-        <Link
-          href="/dashboard"
-          className="text-sm font-body text-primary border border-primary rounded px-4 py-1.5 hover:bg-primary/10 transition-colors"
-        >
-          Dashboard →
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/browse" className="text-sm font-body text-on-surface-variant hover:text-on-surface transition-colors">
+            Browse
+          </Link>
+          <Link href="/dashboard" className="text-sm font-body text-primary border border-primary rounded px-4 py-1.5 hover:bg-primary/10 transition-colors">
+            Dashboard →
+          </Link>
+        </div>
       </nav>
 
       {/* Hero */}

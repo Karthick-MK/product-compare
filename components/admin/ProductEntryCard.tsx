@@ -40,7 +40,18 @@ export function ProductEntryCard({ index, product, onChange, onRemove }: Props) 
     <div className="bg-surface-low border border-outline-variant rounded p-4 space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-xs font-mono text-on-surface-variant">PRODUCT {index + 1}</span>
-        <button onClick={onRemove} className="text-xs text-tertiary hover:text-tertiary/80">Remove</button>
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={product.isTopPick ?? false}
+              onChange={e => onChange({ ...product, isTopPick: e.target.checked })}
+              className="accent-primary w-3 h-3"
+            />
+            <span className="text-xs font-mono text-primary">TOP PICK</span>
+          </label>
+          <button onClick={onRemove} className="text-xs text-tertiary hover:text-tertiary/80">Remove</button>
+        </div>
       </div>
 
       <div className="flex gap-2">

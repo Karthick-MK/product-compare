@@ -39,7 +39,7 @@ export default function NewComparisonPage() {
     const { data, error: err } = await res.json()
     setLoading(false)
     if (err) { setError(err); return }
-    router.push(`/comparisons/${data.id}/edit`)
+    router.push(`/dashboard`)
   }
 
   return (

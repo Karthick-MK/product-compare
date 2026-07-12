@@ -26,9 +26,9 @@ export function ComparisonTable({ products }: Props) {
               <th className="px-4 py-2 text-xs font-mono text-on-surface-variant uppercase text-left">
                 MODEL SPECIFICATIONS
               </th>
-              {products.map((p, i) => (
+              {products.map((p) => (
                 <th key={p.id} className="border-l border-outline-variant overflow-visible pt-6">
-                  <ProductHeader product={p} isTopPick={i === 0} />
+                  <ProductHeader product={p} isTopPick={p.isTopPick} />
                 </th>
               ))}
             </tr>
@@ -55,10 +55,10 @@ export function ComparisonTable({ products }: Props) {
 
       {/* Mobile stacked cards */}
       <div className="md:hidden space-y-4">
-        {products.map((p, i) => (
+        {products.map((p) => (
           <div key={p.id} className="border border-outline-variant rounded-lg overflow-hidden">
             <div className="bg-surface-low p-4">
-              <ProductHeader product={p} isTopPick={i === 0} />
+              <ProductHeader product={p} isTopPick={p.isTopPick} />
             </div>
             <div className="divide-y divide-outline-variant">
               {specKeys.map(key => {

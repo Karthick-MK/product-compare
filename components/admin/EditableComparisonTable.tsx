@@ -12,68 +12,67 @@ interface Props {
 
 export function EditableComparisonTable({ products, comparisonId, onSaved }: Props) {
   const [local, setLocal] = useState<Product[]>(products)
+  const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [lastSaved, setLastSaved] = useState<string | null>(null)
   const [newSpecKey, setNewSpecKey] = useState('')
 
-  // Re-sync when parent reloads (e.g. after rating save)
-  useEffect(() => { setLocal(products) }, [products])
+  useEffect(() => { setLocal(products); setDirty(false) }, [products])
 
   const specKeys = local[0]?.specs?.map(s => s.specKey) ?? []
 
   function addSpecRow() {
     const key = newSpecKey.trim()
     if (!key || specKeys.includes(key)) return
-    const updated = local.map(p => ({
+    setLocal(prev => prev.map(p => ({
       ...p,
       specs: [...(p.specs ?? []), { id: `new-${key}-${p.id}`, productId: p.id, specKey: key, specValue: 'N/A' }],
-    }))
-    setLocal(updated)
+    })))
+    setDirty(true)
     setNewSpecKey('')
-    save(updated)
   }
 
-  async function save(updated: Product[]) {
+  // Exposed for parent's Save button via ref — not used here
+  async function saveNow(data: Product[]) {
     setSaving(true)
     await fetch(`/api/comparisons/${comparisonId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ products: updated }),
+      body: JSON.stringify({ products: data }),
     })
     setSaving(false)
-    setLastSaved(new Date().toLocaleTimeString())
+    setDirty(false)
     onSaved()
   }
 
   function updateSpec(productIdx: number, specKey: string, value: string) {
-    const updated = local.map((p, i) => {
-      if (i !== productIdx) return p
-      return {
-        ...p,
-        specs: p.specs?.map(s => s.specKey === specKey ? { ...s, specValue: value } : s) ?? [],
-      }
-    })
-    setLocal(updated)
-    save(updated)
+    setLocal(prev => prev.map((p, i) => i !== productIdx ? p : {
+      ...p,
+      specs: p.specs?.map(s => s.specKey === specKey ? { ...s, specValue: value } : s) ?? [],
+    }))
+    setDirty(true)
   }
 
   function updateProsCons(productIdx: number, pcId: string, text: string) {
-    const updated = local.map((p, i) => {
-      if (i !== productIdx) return p
-      return {
-        ...p,
-        prosCons: p.prosCons?.map(pc => pc.id === pcId ? { ...pc, text } : pc) ?? [],
-      }
-    })
-    setLocal(updated)
-    save(updated)
+    setLocal(prev => prev.map((p, i) => i !== productIdx ? p : {
+      ...p,
+      prosCons: p.prosCons?.map(pc => pc.id === pcId ? { ...pc, text } : pc) ?? [],
+    }))
+    setDirty(true)
   }
 
   return (
     <div className="space-y-1">
-      <div className="flex justify-end h-4">
-        {saving && <p className="text-xs text-on-surface-variant">Saving...</p>}
-        {!saving && lastSaved && <p className="text-xs text-secondary">✓ Saved at {lastSaved}</p>}
+      <div className="flex items-center justify-between h-6">
+        <p className="text-xs text-on-surface-variant">{dirty ? '● Unsaved changes' : ''}</p>
+        {dirty && (
+          <button
+            onClick={() => saveNow(local)}
+            disabled={saving}
+            className="text-xs font-mono text-primary border border-primary/40 rounded px-3 py-1 hover:bg-primary/10 disabled:opacity-50 transition-colors"
+          >
+            {saving ? 'Saving...' : 'Save changes'}
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border border-outline-variant rounded-lg overflow-hidden text-sm">
