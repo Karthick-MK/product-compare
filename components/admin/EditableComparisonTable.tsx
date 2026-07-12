@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { InlineEditCell } from './InlineEditCell'
 import type { Product } from '@/types'
 
@@ -15,6 +15,9 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
   const [saving, setSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<string | null>(null)
   const [newSpecKey, setNewSpecKey] = useState('')
+
+  // Re-sync when parent reloads (e.g. after rating save)
+  useEffect(() => { setLocal(products) }, [products])
 
   const specKeys = local[0]?.specs?.map(s => s.specKey) ?? []
 

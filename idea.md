@@ -48,7 +48,10 @@ Issue :
 
 7. We also need to give the user the manual way to add a new comparison option. Let's say the user wants to add warranty, which we don't generate from AI. 
 
+8. User rating is missing. Check the stitch design. 
+
 8. Page deisgn is off from sticth
+
 
 Non Pro manul entry.
 Can we give option to add comaprative fields for each manualy for non pro users ?
@@ -60,3 +63,7 @@ I can maully input for each product.
 
 
 6. Need to give drag and drop or Admin to choose top pick
+
+
+7. Dont auto save
+8. List of what we published should be given for users website so taht they can browse other lists too. Bu time order.

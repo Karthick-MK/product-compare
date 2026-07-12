@@ -17,6 +17,8 @@ const updateSchema = z.object({
     imageUrl: z.string().nullable().optional(),
     price: z.string().nullable().optional(),
     userNotes: z.string().nullable().optional(),
+    rating: z.number().min(0).max(5).nullable().optional(),
+    reviewCount: z.number().int().nullable().optional(),
     fetchedRaw: z.any().optional(),
     specs: z.array(z.object({ specKey: z.string(), specValue: z.string() })).optional(),
     prosCons: z.array(z.object({ type: z.enum(['pro', 'con']), text: z.string(), position: z.number() })).optional(),
@@ -80,7 +82,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
           const productData = {
             position: p.position, url: p.url, affiliateUrl: p.affiliateUrl ?? null,
             name: p.name, imageUrl: p.imageUrl ?? null, price: p.price ?? null,
-            userNotes: p.userNotes ?? null, fetchedRaw: p.fetchedRaw ?? undefined,
+            userNotes: p.userNotes ?? null, rating: p.rating ?? null,
+            reviewCount: p.reviewCount ?? null, fetchedRaw: p.fetchedRaw ?? undefined,
           }
 
           let productId = p.id
