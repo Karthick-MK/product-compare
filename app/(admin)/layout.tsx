@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Dashboard
           </Link>
           <Link href="/comparisons/new" className="flex items-center gap-2 px-3 py-2 rounded text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-high transition-colors">
-            New Comparison
+            + New Page
           </Link>
           <Link href="/categories" className="flex items-center gap-2 px-3 py-2 rounded text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-high transition-colors">
             Categories

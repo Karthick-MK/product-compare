@@ -6,6 +6,7 @@ export async function fetchProductFromUrl(url: string): Promise<FetchedProductDa
   const headers: Record<string, string> = {
     Accept: 'application/json',
     'X-Return-Format': 'markdown',
+    'X-With-Images-Summary': 'true',
   }
   if (process.env.JINA_API_KEY) {
     headers['Authorization'] = `Bearer ${process.env.JINA_API_KEY}`
@@ -19,15 +20,19 @@ export async function fetchProductFromUrl(url: string): Promise<FetchedProductDa
 
   const markdown: string = await response.text()
 
-  const titleMatch = markdown.match(/^#\s+(.+)$/m)
-  const name = titleMatch ? titleMatch[1].trim() : 'Unknown Product'
+  // Title: try H1, then first bold, then first non-empty line
+  const h1Match = markdown.match(/^#\s+(.+)$/m)
+  const boldMatch = markdown.match(/\*\*(.{10,100})\*\*/)
+  const firstLine = markdown.split('\n').find(l => l.trim().length > 10)?.trim()
+  const name = (h1Match?.[1] ?? boldMatch?.[1] ?? firstLine ?? 'Unknown Product').trim()
 
-  const imageMatch = markdown.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/)
-  const imageUrl = imageMatch ? imageMatch[1] : null
+  // Image: first real image URL (skip tiny icons < 50 chars)
+  const imageMatches = [...markdown.matchAll(/!\[.*?\]\((https?:\/\/[^\s)]{30,})\)/g)]
+  const imageUrl = imageMatches[0]?.[1] ?? null
 
-  // ponytail: covers ₹ $ £ € — add more symbols if needed
-  const priceMatch = markdown.match(/[₹$£€][\d,]+(?:\.\d{2})?/)
-  const price = priceMatch ? priceMatch[0] : null
+  // Price: handles ₹, $, £, €, Rs — with optional commas
+  const priceMatch = markdown.match(/(?:Rs\.?\s*|₹\s*|MRP\s*:?\s*[₹]?\s*)[\d,]+(?:\.\d{2})?|[₹$£€][\d,]+(?:\.\d{2})?/)
+  const price = priceMatch ? priceMatch[0].trim() : null
 
   const description = markdown.slice(0, 3000)
 

@@ -21,3 +21,42 @@ Or I also plan to go to all the top deals on the YouTube channel or anywhere and
 RIR also has this idea of giving this website as a SaaS. For different YouTube people who are there, there are a lot of YouTube content creators who create top 10 products or best products, something like that. They can give all the products in the admin panel, and then it will create the affiliate link for them. They can also enter a free link for each product, and they will get this unique, beautifully looking website for that market. They can use the website for their marketing. Currently, they are doing it from link, link tree shop, etc. 
 
 Need to come up with an idea which I can make money out of it. 
+
+
+
+
+Issue :
+
+1. CATEGORY - > Give Add catageory option -> small icon to add directly near the dropdown
+
+2. catageory page -> 404
+ ther is not visual clue on fetching
+
+3. Fetching issue
+  always unknow product
+  no image
+
+ No rating, Pros, cons, etc
+
+4. Menu showing " New Comparisoion" - it should be genric as we are doing comparision also generta product list
+
+5. Filters are missing
+
+6. Also, the basic description is missing. Let's say Best Dumbled is a title. I will add a description. This is the number I found in Best with Adjust Dumbled, whatever, whatever. That is missing. So description is for the entire page. 
+
+ 7. So I found the images are missing. In case I want to add an image, I need to give the image URL because I will copy from Amazon or whatever. (say https://m.media-amazon.com/images/I/71zR7VnjXTL._SL1500_.jpg I CAN ABLE TO COPY FROM AMAON, BUT AI DOEST DO IT CORRECTLY IMAGE URL) 
+
+7. We also need to give the user the manual way to add a new comparison option. Let's say the user wants to add warranty, which we don't generate from AI. 
+
+8. Page deisgn is off from sticth
+
+Non Pro manul entry.
+Can we give option to add comaprative fields for each manualy for non pro users ?
+Say to the user below: Instead of "Generate comparison by AI", it will differently generate "Generate affiliate link", "view deal price", and a product title below, and the user can add any other comparison field they wanted. By this way, we will eliminate both Jina and other API fetch calls using ai.
+We can set it in the config whether to use AI or not for testing purposes, but I was thinking that in the future we can give this software for free to all the non-pro users without AI functionality. 
+
+Let's say I can add a comparison option, add protein quantity, and it will be available for all the products we are comparing. I can add those: say protein per 100 g or digestibility, this kind of thing. 
+I can maully input for each product. 
+
+
+6. Need to give drag and drop or Admin to choose top pick

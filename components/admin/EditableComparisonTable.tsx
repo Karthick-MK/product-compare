@@ -14,8 +14,21 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
   const [local, setLocal] = useState<Product[]>(products)
   const [saving, setSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<string | null>(null)
+  const [newSpecKey, setNewSpecKey] = useState('')
 
   const specKeys = local[0]?.specs?.map(s => s.specKey) ?? []
+
+  function addSpecRow() {
+    const key = newSpecKey.trim()
+    if (!key || specKeys.includes(key)) return
+    const updated = local.map(p => ({
+      ...p,
+      specs: [...(p.specs ?? []), { id: `new-${key}-${p.id}`, productId: p.id, specKey: key, specValue: 'N/A' }],
+    }))
+    setLocal(updated)
+    setNewSpecKey('')
+    save(updated)
+  }
 
   async function save(updated: Product[]) {
     setSaving(true)
@@ -148,6 +161,24 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* Add custom spec row */}
+      <div className="flex gap-2 items-center">
+        <input
+          value={newSpecKey}
+          onChange={e => setNewSpecKey(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && addSpecRow()}
+          placeholder="Add spec row (e.g. Warranty)"
+          className="flex-1 bg-surface-low border border-outline-variant rounded px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary"
+        />
+        <button
+          onClick={addSpecRow}
+          disabled={!newSpecKey.trim()}
+          className="text-xs font-mono text-primary border border-primary/40 rounded px-3 py-1.5 hover:bg-primary/10 disabled:opacity-40 transition-colors"
+        >
+          + Add Row
+        </button>
       </div>
     </div>
   )

@@ -77,6 +77,24 @@ export default function EditComparisonPage() {
         </div>
       </div>
 
+      {/* Page description */}
+      <section className="space-y-2">
+        <h2 className="text-sm font-mono text-on-surface-variant">PAGE DESCRIPTION</h2>
+        <textarea
+          defaultValue={comparison.introText ?? ''}
+          onBlur={async (e) => {
+            await fetch(`/api/comparisons/${params.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ introText: e.target.value }),
+            })
+          }}
+          placeholder="Describe this comparison page — shown below the title on the public page"
+          rows={2}
+          className="w-full bg-surface-low border border-outline-variant rounded px-3 py-2 text-sm text-on-surface resize-none focus:outline-none focus:border-primary"
+        />
+      </section>
+
       {/* Products */}
       <section className="space-y-3">
         <h2 className="text-sm font-mono text-on-surface-variant">PRODUCTS</h2>
