@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation'
 import { PublicNav } from '@/components/comparison/PublicNav'
 import { db } from '@/lib/db/prisma'
-import { RoundupGrid } from '@/components/roundup/RoundupGrid'
-import { AiVerdict } from '@/components/comparison/AiVerdict'
+import { FilteredRoundup } from '@/components/roundup/FilteredRoundup'
 import { Badge } from '@/components/ui/Badge'
 import { cache } from 'react'
 import type { Metadata } from 'next'
@@ -61,11 +60,10 @@ export default async function RoundupPage({ params }: Props) {
           )}
         </div>
 
-        {/* Product grid */}
-        <RoundupGrid products={roundup.products as unknown as Product[]} />
-
-        {/* AI Verdict */}
-        {roundup.aiVerdict && <AiVerdict verdict={roundup.aiVerdict} />}
+        <FilteredRoundup
+          products={roundup.products as unknown as Product[]}
+          aiVerdict={roundup.aiVerdict}
+        />
 
         {/* Disclaimer */}
         <p className="mt-6 text-xs text-on-surface-variant text-center">
