@@ -61,6 +61,10 @@ We can set it in the config whether to use AI or not for testing purposes, but I
 Let's say I can add a comparison option, add protein quantity, and it will be available for all the products we are comparing. I can add those: say protein per 100 g or digestibility, this kind of thing. 
 I can maully input for each product. 
 
+It is simple, lets remove fetch and Generate comparision  AI options, 
+we already havina all fields needed in the product section
+USERC CAN ADD ALL THERES MANUALLY, AND ALSO WE CAN SHOW IN BELOW TABLE ON SAVE. 
+IN BELOW USERS CAN ADD NEW WFEATURES, WE ALREAD Y HAS ADD MORE COLUMN CALSUE. BASIC IT WILL BE IMAGE, TITEL, RATING, USERE ENTERED DESCRIPT/REACSERCH DESCRIOPTON USERS MANUALLY ENTERED.
 
 6. Need to give drag and drop or Admin to choose top pick
 
