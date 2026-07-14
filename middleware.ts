@@ -6,6 +6,7 @@ const isPublicRoute = createRouteMatcher([
   '/compare(.*)',
   '/list(.*)',
   '/browse(.*)',
+  '/embed(.*)',
   '/api/webhook(.*)',
 ])
 

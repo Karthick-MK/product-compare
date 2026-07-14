@@ -3,6 +3,7 @@ import { PublicNav } from '@/components/comparison/PublicNav'
 import { db } from '@/lib/db/prisma'
 import { FilteredRoundup } from '@/components/roundup/FilteredRoundup'
 import { Badge } from '@/components/ui/Badge'
+import { EmbedButton } from '@/components/ui/EmbedButton'
 import { buildItemListJsonLd } from '@/lib/seo'
 import { cache } from 'react'
 import type { Metadata } from 'next'
@@ -62,13 +63,14 @@ export default async function RoundupPage({ params }: Props) {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Badge label="Roundup" variant="success" />
             {roundup.publishedAt && (
               <span className="text-xs text-on-surface-variant">
                 Updated {new Date(roundup.publishedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
               </span>
             )}
+            <EmbedButton slug={roundup.slug} title={roundup.title} pageType="roundup" />
           </div>
           <h1 className="font-heading text-3xl font-bold text-on-surface">{roundup.title}</h1>
           {roundup.introText && (

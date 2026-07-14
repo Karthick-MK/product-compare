@@ -3,6 +3,7 @@ import { db } from '@/lib/db/prisma'
 import { FilteredComparison } from '@/components/comparison/FilteredComparison'
 import { PublicNav } from '@/components/comparison/PublicNav'
 import { Badge } from '@/components/ui/Badge'
+import { EmbedButton } from '@/components/ui/EmbedButton'
 import { buildItemListJsonLd } from '@/lib/seo'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
@@ -64,13 +65,14 @@ export default async function ComparisonPage({ params }: Props) {
       <PublicNav title={comparison.title} />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Badge label="Technical Guide" variant="success" />
             {comparison.publishedAt && (
               <span className="text-xs text-on-surface-variant">
                 Updated {new Date(comparison.publishedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
               </span>
             )}
+            <EmbedButton slug={comparison.slug} title={comparison.title} pageType="comparison" />
           </div>
           <h1 className="font-heading text-3xl font-bold text-on-surface">{comparison.title}</h1>
           {comparison.introText && (
