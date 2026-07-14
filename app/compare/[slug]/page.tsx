@@ -3,7 +3,6 @@ import { db } from '@/lib/db/prisma'
 import { FilteredComparison } from '@/components/comparison/FilteredComparison'
 import { PublicNav } from '@/components/comparison/PublicNav'
 import { Badge } from '@/components/ui/Badge'
-import { EmbedButton } from '@/components/ui/EmbedButton'
 import { buildItemListJsonLd } from '@/lib/seo'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
@@ -72,7 +71,6 @@ export default async function ComparisonPage({ params }: Props) {
                 Updated {new Date(comparison.publishedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
               </span>
             )}
-            <EmbedButton slug={comparison.slug} title={comparison.title} pageType="comparison" />
           </div>
           <h1 className="font-heading text-3xl font-bold text-on-surface">{comparison.title}</h1>
           {comparison.introText && (

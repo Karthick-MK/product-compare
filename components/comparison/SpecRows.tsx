@@ -10,7 +10,7 @@ export function SpecRows({ specKeys, products }: Props) {
     <>
       {specKeys.map(key => (
         <tr key={key} className="border-t border-outline-variant hover:bg-surface-high/30 transition-colors">
-          <td className="px-4 py-3 text-xs font-mono text-on-surface-variant uppercase tracking-wider whitespace-nowrap">
+          <td className="px-4 py-3 text-xs font-mono text-on-surface-variant uppercase tracking-wider whitespace-nowrap sticky left-0 bg-surface shadow-[2px_0_6px_rgba(0,0,0,0.4)]">
             {key}
           </td>
           {products.map(p => {

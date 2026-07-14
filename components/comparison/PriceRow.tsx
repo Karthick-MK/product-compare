@@ -7,7 +7,7 @@ interface Props {
 export function PriceRow({ products }: Props) {
   return (
     <tr className="border-t border-outline-variant">
-      <td className="px-4 py-4 text-xs font-mono text-on-surface-variant uppercase tracking-wider">
+      <td className="px-4 py-4 text-xs font-mono text-on-surface-variant uppercase tracking-wider sticky left-0 bg-surface shadow-[2px_0_6px_rgba(0,0,0,0.4)]">
         UNIT PRICE
       </td>
       {products.map(p => (

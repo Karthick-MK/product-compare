@@ -15,7 +15,7 @@ export function ProsConsRow({ type, products }: Props) {
 
   return (
     <tr className={`border-t border-outline-variant ${bgColor}`}>
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 sticky left-0 bg-surface shadow-[2px_0_6px_rgba(0,0,0,0.4)]">
         <span className={`text-xs font-mono uppercase tracking-wider ${textColor}`}>{label}</span>
       </td>
       {products.map(p => {

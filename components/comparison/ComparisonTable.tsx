@@ -23,7 +23,7 @@ export function ComparisonTable({ products }: Props) {
         {/* Product header row */}
         <thead>
           <tr className="border-b border-outline-variant">
-            <th className="px-3 py-3 text-left">
+            <th className="px-3 py-3 text-left sticky left-0 z-20 bg-surface shadow-[2px_0_6px_rgba(0,0,0,0.4)]">
               <span className="text-xs font-mono text-on-surface-variant uppercase tracking-wider">
                 Specifications
               </span>
@@ -99,7 +99,7 @@ export function ComparisonTable({ products }: Props) {
 
           {/* Rating row */}
           <tr className="border-t border-outline-variant">
-            <td className="px-3 py-3 text-xs font-mono text-on-surface-variant uppercase tracking-wider">
+            <td className="px-3 py-3 text-xs font-mono text-on-surface-variant uppercase tracking-wider sticky left-0 bg-surface shadow-[2px_0_6px_rgba(0,0,0,0.4)]">
               User Rating
             </td>
             {products.map(p => (

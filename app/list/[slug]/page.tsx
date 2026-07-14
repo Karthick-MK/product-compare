@@ -3,7 +3,6 @@ import { PublicNav } from '@/components/comparison/PublicNav'
 import { db } from '@/lib/db/prisma'
 import { FilteredRoundup } from '@/components/roundup/FilteredRoundup'
 import { Badge } from '@/components/ui/Badge'
-import { EmbedButton } from '@/components/ui/EmbedButton'
 import { buildItemListJsonLd } from '@/lib/seo'
 import { cache } from 'react'
 import type { Metadata } from 'next'
@@ -70,7 +69,6 @@ export default async function RoundupPage({ params }: Props) {
                 Updated {new Date(roundup.publishedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
               </span>
             )}
-            <EmbedButton slug={roundup.slug} title={roundup.title} pageType="roundup" />
           </div>
           <h1 className="font-heading text-3xl font-bold text-on-surface">{roundup.title}</h1>
           {roundup.introText && (
