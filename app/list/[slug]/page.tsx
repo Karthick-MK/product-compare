@@ -29,12 +29,18 @@ const getRoundup = cache(async (slug: string) => {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const roundup = await getRoundup(params.slug)
   if (!roundup) return { title: 'Not Found' }
+  const names = roundup.products.map(p => p.name).filter(Boolean)
+  const description = roundup.introText
+    ?? (names.length > 0
+      ? `Top picks: ${names.slice(0, 4).join(', ')} and more — ranked by value, performance and ratings.`
+      : `Top picks: ${roundup.title}`)
   return {
     title: roundup.title,
-    description: roundup.introText ?? `Top picks: ${roundup.title}`,
+    description,
+    keywords: names.join(', '),
     openGraph: {
       title: roundup.title,
-      description: roundup.introText ?? `Top picks: ${roundup.title}`,
+      description,
       images: roundup.products[0]?.imageUrl ? [{ url: roundup.products[0].imageUrl }] : [],
     },
   }
