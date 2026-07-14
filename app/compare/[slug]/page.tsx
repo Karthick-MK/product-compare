@@ -31,7 +31,10 @@ function seoTitle(title: string, names: string[]): string {
   const lower = title.toLowerCase()
   const anyMissing = names.some(n => !lower.includes(n.toLowerCase()))
   if (!anyMissing || names.length === 0) return title
-  return `${title}: ${names.slice(0, 3).join(' vs ')}`
+  // Truncate each name to first 3 words, use at most 2 products, cap total at 60 chars
+  const shortNames = names.slice(0, 2).map(n => n.split(' ').slice(0, 3).join(' '))
+  const candidate = `${title}: ${shortNames.join(' vs ')}`
+  return candidate.length <= 70 ? candidate : title
 }
 
 function seoDescription(names: string[], introText: string | null, category: string): string {
