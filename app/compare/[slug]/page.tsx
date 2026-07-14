@@ -3,6 +3,7 @@ import { db } from '@/lib/db/prisma'
 import { FilteredComparison } from '@/components/comparison/FilteredComparison'
 import { PublicNav } from '@/components/comparison/PublicNav'
 import { Badge } from '@/components/ui/Badge'
+import { buildItemListJsonLd } from '@/lib/seo'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
 
@@ -31,8 +32,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const comparison = await getComparison(slug)
   if (!comparison) return { title: 'Not Found' }
   return {
-    title: `${comparison.title} | CompareIt`,
+    title: comparison.title,
     description: comparison.introText ?? `Compare top ${comparison.category.name} products side by side.`,
+    openGraph: {
+      title: comparison.title,
+      description: comparison.introText ?? `Compare top ${comparison.category.name} products side by side.`,
+      images: comparison.products[0]?.imageUrl ? [{ url: comparison.products[0].imageUrl }] : [],
+    },
   }
 }
 
@@ -41,8 +47,20 @@ export default async function ComparisonPage({ params }: Props) {
   const comparison = await getComparison(slug)
   if (!comparison) notFound()
 
+  const jsonLd = buildItemListJsonLd(
+    comparison.title,
+    comparison.slug,
+    'comparison',
+    comparison.products as unknown as Product[],
+    comparison.introText,
+  )
+
   return (
     <div className="min-h-screen bg-surface">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PublicNav title={comparison.title} />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-6">

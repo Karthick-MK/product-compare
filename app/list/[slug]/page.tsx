@@ -3,6 +3,7 @@ import { PublicNav } from '@/components/comparison/PublicNav'
 import { db } from '@/lib/db/prisma'
 import { FilteredRoundup } from '@/components/roundup/FilteredRoundup'
 import { Badge } from '@/components/ui/Badge'
+import { buildItemListJsonLd } from '@/lib/seo'
 import { cache } from 'react'
 import type { Metadata } from 'next'
 import type { Product } from '@/types'
@@ -29,8 +30,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const roundup = await getRoundup(params.slug)
   if (!roundup) return { title: 'Not Found' }
   return {
-    title: `${roundup.title} | CompareIt`,
+    title: roundup.title,
     description: roundup.introText ?? `Top picks: ${roundup.title}`,
+    openGraph: {
+      title: roundup.title,
+      description: roundup.introText ?? `Top picks: ${roundup.title}`,
+      images: roundup.products[0]?.imageUrl ? [{ url: roundup.products[0].imageUrl }] : [],
+    },
   }
 }
 
@@ -38,8 +44,20 @@ export default async function RoundupPage({ params }: Props) {
   const roundup = await getRoundup(params.slug)
   if (!roundup) notFound()
 
+  const jsonLd = buildItemListJsonLd(
+    roundup.title,
+    roundup.slug,
+    'roundup',
+    roundup.products as unknown as Product[],
+    roundup.introText,
+  )
+
   return (
     <div className="min-h-screen bg-surface">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PublicNav title={roundup.title} />
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
