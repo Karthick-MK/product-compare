@@ -8,6 +8,7 @@ import { InlineEditCell } from '@/components/admin/InlineEditCell'
 import { EditableComparisonTable } from '@/components/admin/EditableComparisonTable'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
+import { EmbedButton } from '@/components/ui/EmbedButton'
 import { EditPageSkeleton } from '@/components/ui/Skeleton'
 import { useToast } from '@/components/ui/Toast'
 import type { Comparison, Product } from '@/types'
@@ -78,9 +79,16 @@ export default function EditComparisonPage() {
             {comparison.status === 'published' ? 'Unpublish' : 'Publish'}
           </Button>
           {comparison.status === 'published' && (
-            <a href={publicUrl} target="_blank" rel="noreferrer">
-              <Button variant="ghost" size="sm">View Live →</Button>
-            </a>
+            <>
+              <EmbedButton
+                slug={comparison.slug}
+                title={comparison.title}
+                pageType={comparison.pageType === 'roundup' ? 'roundup' : 'comparison'}
+              />
+              <a href={publicUrl} target="_blank" rel="noreferrer">
+                <Button variant="ghost" size="sm">View Live →</Button>
+              </a>
+            </>
           )}
         </div>
       </div>
