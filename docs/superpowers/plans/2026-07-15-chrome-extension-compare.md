@@ -741,115 +741,205 @@ git commit -m "feat: inject Add to Compare button and floating bar (content.js)"
 
 - [ ] **Step 1: Write compare.css**
 
+Matches the existing site's dark theme: surface `#0b1326`, primary `#adc6ff`, Hanken Grotesk + Inter from Google Fonts.
+
 ```css
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f8fafc;
-  color: #1e293b;
+  font-family: "Inter", -apple-system, sans-serif;
+  background: #0b1326;
+  color: #dae2fd;
   min-height: 100vh;
 }
+
 header {
-  background: #1e293b;
-  color: #fff;
-  padding: 16px 24px;
+  background: #131b2e;
+  border-bottom: 1px solid #424754;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-header h1 { font-size: 18px; font-weight: 700; flex: 1; }
-header span { font-size: 13px; color: #94a3b8; }
+header h1 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #adc6ff;
+  flex: 1;
+  letter-spacing: -0.01em;
+}
+header span { font-size: 12px; color: #c2c6d6; }
 #clear-all-btn {
   background: transparent;
-  border: 1px solid #475569;
-  color: #94a3b8;
+  border: 1px solid #424754;
+  color: #c2c6d6;
   border-radius: 20px;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
 }
-#clear-all-btn:hover { color: #ef4444; border-color: #ef4444; }
+#clear-all-btn:hover { color: #ffb2b7; border-color: #ffb2b7; }
+
 #empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60vh;
-  color: #94a3b8;
-  font-size: 16px;
+  height: 70vh;
   gap: 8px;
+  color: #c2c6d6;
+  font-size: 15px;
+}
+#empty-state span:last-child { font-size: 13px; color: #424754; }
+
+#compare-wrapper {
+  overflow-x: auto;
+  padding: 24px;
 }
 #compare-table {
   display: flex;
   gap: 0;
-  overflow-x: auto;
-  padding: 24px;
-  min-height: calc(100vh - 64px);
+  min-width: max-content;
 }
+
 .product-col {
-  min-width: 220px;
-  max-width: 280px;
-  flex: 1;
-  background: #fff;
-  border-right: 1px solid #e2e8f0;
+  width: 240px;
+  background: #131b2e;
+  border: 1px solid #424754;
+  border-right: none;
   display: flex;
   flex-direction: column;
+  transition: background 0.15s;
 }
-.product-col:last-child { border-right: none; }
+.product-col:first-child { border-radius: 10px 0 0 10px; }
+.product-col:last-child { border-right: 1px solid #424754; border-radius: 0 10px 10px 0; }
+.product-col:hover { background: #1a2540; }
+
 .col-image-wrap {
-  padding: 16px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 20px;
+  background: #0b1326;
+  border-bottom: 1px solid #424754;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
+  height: 170px;
+  position: relative;
 }
+.col-image-wrap a { display: flex; align-items: center; justify-content: center; }
 .col-image-wrap img {
-  max-width: 140px;
-  max-height: 140px;
+  max-width: 130px;
+  max-height: 130px;
   object-fit: contain;
 }
-.col-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-.col-title { font-size: 13px; font-weight: 600; line-height: 1.4; color: #1e293b; }
-.col-price { font-size: 20px; font-weight: 700; color: #2563eb; }
-.col-rating { font-size: 12px; color: #64748b; }
-.col-bullets {
-  font-size: 12px;
-  color: #475569;
-  list-style: disc;
-  padding-left: 16px;
+
+.col-body {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-height: 160px;
-  overflow-y: auto;
+  gap: 10px;
+  flex: 1;
 }
-.col-bullets li { line-height: 1.4; }
-.col-footer { padding: 16px; border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 8px; }
+.col-title {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #dae2fd;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.col-price {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #adc6ff;
+  letter-spacing: -0.02em;
+}
+.col-rating {
+  font-size: 11px;
+  color: #c2c6d6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.col-rating .stars { color: #fbbf24; letter-spacing: 1px; }
+
+.col-bullets-label {
+  font-size: 10px;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #424754;
+  padding-top: 4px;
+  border-top: 1px solid #424754;
+}
+.col-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #424754 transparent;
+}
+.col-bullets li {
+  font-size: 11.5px;
+  color: #c2c6d6;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+.col-bullets li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: #4edea3;
+  font-weight: 700;
+}
+
+.col-footer {
+  padding: 14px 16px;
+  border-top: 1px solid #424754;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .buy-btn {
   display: block;
   text-align: center;
   background: #ff9900;
-  color: #1e293b;
+  color: #0b1326;
+  font-family: "Hanken Grotesk", sans-serif;
   font-weight: 700;
   font-size: 13px;
   padding: 10px;
   border-radius: 8px;
   text-decoration: none;
+  transition: background 0.15s;
 }
-.buy-btn:hover { background: #f59e0b; }
+.buy-btn:hover { background: #ffb347; }
 .remove-btn {
   display: block;
   text-align: center;
   background: transparent;
   border: none;
-  color: #94a3b8;
-  font-size: 12px;
+  color: #424754;
+  font-size: 11px;
   cursor: pointer;
-  padding: 4px;
+  padding: 3px;
+  font-family: inherit;
+  transition: color 0.15s;
 }
-.remove-btn:hover { color: #ef4444; }
+.remove-btn:hover { color: #ffb2b7; }
 ```
 
 - [ ] **Step 2: Write compare.html**
@@ -861,6 +951,8 @@ header span { font-size: 13px; color: #94a3b8; }
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>CompareXT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="compare.css"/>
 </head>
 <body>
@@ -869,7 +961,9 @@ header span { font-size: 13px; color: #94a3b8; }
     <span id="product-count"></span>
     <button id="clear-all-btn">Clear All</button>
   </header>
-  <div id="compare-table"></div>
+  <div id="compare-wrapper">
+    <div id="compare-table"></div>
+  </div>
   <div id="empty-state" style="display:none">
     <span>No products to compare.</span>
     <span>Visit an Amazon product page and click "Add to Compare".</span>
@@ -886,8 +980,17 @@ header span { font-size: 13px; color: #94a3b8; }
 const AFFILIATE_TAG = "YOUR-TAG-HERE";
 
 function buildAffiliateUrl(asin, site) {
-  const base = site === "amazon" ? "https://www.amazon.in" : "https://www.amazon.in";
+  const base = "https://www.amazon.in";
   return `${base}/dp/${asin}?tag=${AFFILIATE_TAG}`;
+}
+
+function starString(ratingText) {
+  const match = ratingText && ratingText.match(/(\d+(\.\d+)?)/);
+  if (!match) return "";
+  const n = parseFloat(match[1]);
+  const full = Math.floor(n);
+  const half = n - full >= 0.5 ? 1 : 0;
+  return "★".repeat(full) + (half ? "½" : "") + "☆".repeat(5 - full - half);
 }
 
 function renderProduct(product) {
@@ -897,19 +1000,22 @@ function renderProduct(product) {
   col.dataset.asin = product.asin;
 
   const bulletsHtml = product.bullets && product.bullets.length
-    ? `<ul class="col-bullets">${product.bullets.map(b => `<li>${b}</li>`).join("")}</ul>`
-    : `<p style="font-size:12px;color:#94a3b8">No features available</p>`;
+    ? `<div class="col-bullets-label">Features</div>
+       <ul class="col-bullets">${product.bullets.map(b => `<li>${b}</li>`).join("")}</ul>`
+    : "";
+
+  const stars = starString(product.rating);
 
   col.innerHTML = `
     <div class="col-image-wrap">
       <a href="${affiliateUrl}" target="_blank" rel="noopener">
-        <img src="${product.image || ''}" alt="${product.title}" onerror="this.style.display='none'"/>
+        <img src="${product.image || ""}" alt="${product.title}" onerror="this.style.display='none'"/>
       </a>
     </div>
     <div class="col-body">
       <div class="col-title">${product.title || "Unknown product"}</div>
       <div class="col-price">${product.price ? "₹" + product.price : "—"}</div>
-      <div class="col-rating">${product.rating || ""} ${product.reviewCount ? "· " + product.reviewCount : ""}</div>
+      ${product.rating ? `<div class="col-rating"><span class="stars">${stars}</span><span>${product.rating}</span>${product.reviewCount ? `<span>· ${product.reviewCount}</span>` : ""}</div>` : ""}
       ${bulletsHtml}
     </div>
     <div class="col-footer">
@@ -923,19 +1029,20 @@ function renderProduct(product) {
 async function render() {
   const products = await DB.getAll();
   const table = document.getElementById("compare-table");
+  const wrapper = document.getElementById("compare-wrapper");
   const empty = document.getElementById("empty-state");
   const count = document.getElementById("product-count");
 
   table.innerHTML = "";
 
   if (products.length === 0) {
-    table.style.display = "none";
+    wrapper.style.display = "none";
     empty.style.display = "flex";
     count.textContent = "";
     return;
   }
 
-  table.style.display = "flex";
+  wrapper.style.display = "block";
   empty.style.display = "none";
   count.textContent = `${products.length} product${products.length !== 1 ? "s" : ""}`;
 
@@ -962,12 +1069,11 @@ render();
 1. Reload extension at `chrome://extensions/`
 2. Visit 2–3 Amazon product pages, click "Add to Compare" on each
 3. Click "COMPARE (N)" in the floating bar
-4. Expected: new tab opens with a horizontal table showing each product
-5. Expected: each column has image, title, price, rating, bullet list
-6. Expected: "Buy on Amazon →" button visible in each column (orange button)
-7. Click "Remove" on one column → column disappears, count updates
-8. Click "Clear All" → empty state shown
-9. Open DevTools → Network tab → verify no external requests fire when opening compare tab
+4. Expected: new tab opens with dark (`#0b1326`) background, matching the main site's theme
+5. Expected: each column has image, title, price in `#adc6ff` blue, star rating, bullet list with teal `›` markers
+6. Expected: orange "Buy on Amazon →" button at bottom of each column
+7. Click "Remove" → column disappears, count updates
+8. Click "Clear All" → empty state shown on dark background
 
 - [ ] **Step 5: Commit**
 
