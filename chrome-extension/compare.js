@@ -80,7 +80,7 @@ function renderProduct(product) {
   buyBtn.href = affiliateUrl;
   buyBtn.target = "_blank";
   buyBtn.rel = "noopener";
-  buyBtn.textContent = "Buy on Amazon →";
+  buyBtn.textContent = "🛒 Add to Cart →";
 
   const removeBtn = el("button", "remove-btn");
   removeBtn.dataset.asin = product.asin;
