@@ -1,9 +1,3 @@
-const AFFILIATE_TAG = "YOUR-TAG-HERE";
-
-function buildAffiliateUrl(asin) {
-  return `https://www.amazon.in/dp/${asin}?tag=${AFFILIATE_TAG}`;
-}
-
 function starString(ratingText) {
   const match = ratingText && ratingText.match(/(\d+(\.\d+)?)/);
   if (!match) return "";
@@ -20,7 +14,7 @@ function el(tag, cls) {
 }
 
 function renderProduct(product) {
-  const affiliateUrl = buildAffiliateUrl(product.asin);
+  const affiliateUrl = product.affiliateUrl;
 
   const col = el("div", "product-col");
   col.dataset.asin = product.asin;
