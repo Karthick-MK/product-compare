@@ -91,6 +91,22 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
     setDirty(true)
   }
 
+  function updateProduct(productIdx: number, field: 'rating' | 'reviewCount' | 'price', raw: string) {
+    setLocal(prev => prev.map((p, i) => {
+      if (i !== productIdx) return p
+      if (field === 'rating') {
+        const v = parseFloat(raw)
+        return { ...p, rating: isNaN(v) ? null : Math.min(5, Math.max(0, v)) }
+      }
+      if (field === 'reviewCount') {
+        const v = parseInt(raw.replace(/,/g, ''), 10)
+        return { ...p, reviewCount: isNaN(v) ? null : v }
+      }
+      return { ...p, price: raw.trim() || null }
+    }))
+    setDirty(true)
+  }
+
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between h-6">
@@ -204,17 +220,28 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
             {/* Rating row */}
             <tr className="border-t border-outline-variant">
               <td className="px-3 py-2 text-xs font-mono text-on-surface-variant">RATING</td>
-              {local.map(p => (
+              {local.map((p, pi) => (
                 <td key={p.id} className="px-3 py-2 border-l border-outline-variant">
-                  {p.rating ? (
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-yellow-400 text-sm">{'★'.repeat(Math.round(p.rating))}{'☆'.repeat(5 - Math.round(p.rating))}</span>
-                      <span className="text-xs font-mono text-on-surface">{p.rating.toFixed(1)}</span>
-                      {p.reviewCount && <span className="text-xs text-on-surface-variant">({p.reviewCount.toLocaleString()})</span>}
-                    </div>
-                  ) : (
-                    <span className="text-xs text-on-surface-variant">No rating</span>
-                  )}
+                  <div className="flex items-center gap-1.5">
+                    {p.rating != null && (
+                      <span className="text-yellow-400 text-sm">
+                        {'★'.repeat(Math.round(p.rating))}{'☆'.repeat(5 - Math.round(p.rating))}
+                      </span>
+                    )}
+                    <InlineEditCell
+                      value={p.rating != null ? p.rating.toFixed(1) : ''}
+                      onSave={val => updateProduct(pi, 'rating', val)}
+                      className="text-xs font-mono text-on-surface w-10"
+                    />
+                    <span className="text-xs text-on-surface-variant">/5</span>
+                    <span className="text-xs text-on-surface-variant">(</span>
+                    <InlineEditCell
+                      value={p.reviewCount != null ? p.reviewCount.toLocaleString() : ''}
+                      onSave={val => updateProduct(pi, 'reviewCount', val)}
+                      className="text-xs text-on-surface-variant w-16"
+                    />
+                    <span className="text-xs text-on-surface-variant">reviews)</span>
+                  </div>
                 </td>
               ))}
             </tr>
@@ -222,9 +249,13 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
             {/* Price row */}
             <tr className="border-t border-outline-variant">
               <td className="px-3 py-2 text-xs font-mono text-on-surface-variant">PRICE</td>
-              {local.map(p => (
-                <td key={p.id} className="px-3 py-2 border-l border-outline-variant font-heading font-bold text-on-surface">
-                  {p.price ?? '—'}
+              {local.map((p, pi) => (
+                <td key={p.id} className="px-3 py-2 border-l border-outline-variant">
+                  <InlineEditCell
+                    value={p.price ?? ''}
+                    onSave={val => updateProduct(pi, 'price', val)}
+                    className="font-heading font-bold text-on-surface text-sm"
+                  />
                 </td>
               ))}
             </tr>
