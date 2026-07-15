@@ -69,51 +69,49 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       )
     }
 
-    await db.$transaction(async (tx) => {
-      if (Object.keys(comparisonFields).length > 0) {
-        await tx.comparison.update({ where: { id: params.id }, data: comparisonFields })
-      }
+    if (Object.keys(comparisonFields).length > 0) {
+      await db.comparison.update({ where: { id: params.id }, data: comparisonFields })
+    }
 
-      if (products) {
-        const keepIds = products.filter(p => p.id).map(p => p.id as string)
-        await tx.product.deleteMany({
-          where: { comparisonId: params.id, id: { notIn: keepIds } },
-        })
+    if (products) {
+      const keepIds = products.filter(p => p.id).map(p => p.id as string)
+      await db.product.deleteMany({
+        where: { comparisonId: params.id, id: { notIn: keepIds } },
+      })
 
-        for (const p of products) {
-          const productData = {
-            position: p.position, url: p.url, affiliateUrl: p.affiliateUrl ?? null,
-            name: p.name, imageUrl: p.imageUrl ?? null, price: p.price ?? null,
-            userNotes: p.userNotes ?? null, isTopPick: p.isTopPick ?? false,
-            rating: p.rating ?? null, reviewCount: p.reviewCount ?? null,
-            fetchedRaw: p.fetchedRaw ?? undefined,
-          }
+      for (const p of products) {
+        const productData = {
+          position: p.position, url: p.url, affiliateUrl: p.affiliateUrl ?? null,
+          name: p.name, imageUrl: p.imageUrl ?? null, price: p.price ?? null,
+          userNotes: p.userNotes ?? null, isTopPick: p.isTopPick ?? false,
+          rating: p.rating ?? null, reviewCount: p.reviewCount ?? null,
+          fetchedRaw: p.fetchedRaw ?? undefined,
+        }
 
-          let productId = p.id
-          if (productId) {
-            await tx.product.update({ where: { id: productId, comparisonId: params.id }, data: productData })
-          } else {
-            const created = await tx.product.create({
-              data: { ...productData, comparisonId: params.id },
-            })
-            productId = created.id
-          }
+        let productId = p.id
+        if (productId) {
+          await db.product.update({ where: { id: productId, comparisonId: params.id }, data: productData })
+        } else {
+          const created = await db.product.create({
+            data: { ...productData, comparisonId: params.id },
+          })
+          productId = created.id
+        }
 
-          if (p.specs) {
-            await tx.spec.deleteMany({ where: { productId } })
-            await tx.spec.createMany({
-              data: p.specs.map(s => ({ productId: productId!, specKey: s.specKey, specValue: s.specValue })),
-            })
-          }
-          if (p.prosCons) {
-            await tx.prosCons.deleteMany({ where: { productId } })
-            await tx.prosCons.createMany({
-              data: p.prosCons.map(pc => ({ productId: productId!, type: pc.type, text: pc.text, position: pc.position })),
-            })
-          }
+        if (p.specs) {
+          await db.spec.deleteMany({ where: { productId } })
+          await db.spec.createMany({
+            data: p.specs.map(s => ({ productId: productId!, specKey: s.specKey, specValue: s.specValue })),
+          })
+        }
+        if (p.prosCons) {
+          await db.prosCons.deleteMany({ where: { productId } })
+          await db.prosCons.createMany({
+            data: p.prosCons.map(pc => ({ productId: productId!, type: pc.type, text: pc.text, position: pc.position })),
+          })
         }
       }
-    })
+    }
 
     const updated = await getComparison(params.id, workspace.id)
     return NextResponse.json({ data: updated })

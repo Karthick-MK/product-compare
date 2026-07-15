@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { InlineEditCell } from './InlineEditCell'
+import { useToast } from '@/components/ui/Toast'
 import type { Product } from '@/types'
 
 interface Props {
@@ -15,6 +16,7 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
   const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
   const [newSpecKey, setNewSpecKey] = useState('')
+  const { toast } = useToast()
 
   useEffect(() => { setLocal(products); setDirty(false) }, [products])
 
@@ -31,17 +33,21 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
     setNewSpecKey('')
   }
 
-  // Exposed for parent's Save button via ref — not used here
   async function saveNow(data: Product[]) {
     setSaving(true)
-    await fetch(`/api/comparisons/${comparisonId}`, {
+    const res = await fetch(`/api/comparisons/${comparisonId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ products: data }),
     })
     setSaving(false)
-    setDirty(false)
-    onSaved()
+    if (res.ok) {
+      setDirty(false)
+      onSaved()
+    } else {
+      const { error } = await res.json().catch(() => ({ error: null }))
+      toast(error ?? 'Save failed', 'error')
+    }
   }
 
   function updateSpec(productIdx: number, specKey: string, value: string) {
