@@ -4,7 +4,7 @@
       site: "amazon",
       baseUrl: "https://www.amazon.in",
       productPattern: /\/dp\//,
-      extractAsin: url => (url.match(/\/dp\/([A-Z0-9]{10})/) || [])[1] || null,
+      extractAsin: url => (url.match(/\/dp\/([A-Z0-9]{10})/) || [])[1] || "",
       buttonAnchor: "#add-to-cart-button",
       scrape: {
         title: "#productTitle",
@@ -23,7 +23,7 @@
 
   function getSiteConfig(hostname) {
     for (const key of Object.keys(SITES)) {
-      if (hostname.includes(key)) return SITES[key];
+      if (hostname === key || hostname.endsWith("." + key)) return SITES[key];
     }
     return null;
   }
@@ -37,6 +37,7 @@
 
     const wholeEl = document.querySelector(s.priceWhole);
     const fracEl = document.querySelector(s.priceFraction);
+    // ponytail: assumes Amazon price format "₹X,XXX" whole+fraction split
     const price = wholeEl
       ? (wholeEl.textContent.trim().replace(/\D/g, "") + "." + (fracEl ? fracEl.textContent.trim() : "00"))
       : "";
