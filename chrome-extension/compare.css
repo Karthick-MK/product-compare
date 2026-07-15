@@ -1,0 +1,196 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", -apple-system, sans-serif;
+  background: #0b1326;
+  color: #dae2fd;
+  min-height: 100vh;
+}
+
+header {
+  background: #131b2e;
+  border-bottom: 1px solid #424754;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #adc6ff;
+  flex: 1;
+  letter-spacing: -0.01em;
+}
+header span { font-size: 12px; color: #c2c6d6; }
+#clear-all-btn {
+  background: transparent;
+  border: 1px solid #424754;
+  color: #c2c6d6;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+}
+#clear-all-btn:hover { color: #ffb2b7; border-color: #ffb2b7; }
+
+#empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  gap: 8px;
+  color: #c2c6d6;
+  font-size: 15px;
+}
+#empty-state span:last-child { font-size: 13px; color: #424754; }
+
+#compare-wrapper {
+  overflow-x: auto;
+  padding: 24px;
+}
+#compare-table {
+  display: flex;
+  gap: 0;
+  min-width: max-content;
+}
+
+.product-col {
+  width: 240px;
+  background: #131b2e;
+  border: 1px solid #424754;
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.15s;
+}
+.product-col:first-child { border-radius: 10px 0 0 10px; }
+.product-col:last-child { border-right: 1px solid #424754; border-radius: 0 10px 10px 0; }
+.product-col:hover { background: #1a2540; }
+
+.col-image-wrap {
+  padding: 20px;
+  background: #0b1326;
+  border-bottom: 1px solid #424754;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 170px;
+  position: relative;
+}
+.col-image-wrap a { display: flex; align-items: center; justify-content: center; }
+.col-image-wrap img {
+  max-width: 130px;
+  max-height: 130px;
+  object-fit: contain;
+}
+
+.col-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.col-title {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #dae2fd;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.col-price {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #adc6ff;
+  letter-spacing: -0.02em;
+}
+.col-rating {
+  font-size: 11px;
+  color: #c2c6d6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.col-rating .stars { color: #fbbf24; letter-spacing: 1px; }
+
+.col-bullets-label {
+  font-size: 10px;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #424754;
+  padding-top: 4px;
+  border-top: 1px solid #424754;
+}
+.col-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #424754 transparent;
+}
+.col-bullets li {
+  font-size: 11.5px;
+  color: #c2c6d6;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+.col-bullets li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: #4edea3;
+  font-weight: 700;
+}
+
+.col-footer {
+  padding: 14px 16px;
+  border-top: 1px solid #424754;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.buy-btn {
+  display: block;
+  text-align: center;
+  background: #ff9900;
+  color: #0b1326;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.buy-btn:hover { background: #ffb347; }
+.remove-btn {
+  display: block;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: #424754;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px;
+  font-family: inherit;
+  transition: color 0.15s;
+}
+.remove-btn:hover { color: #ffb2b7; }

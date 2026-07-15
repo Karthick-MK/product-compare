@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CompareXT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="compare.css"/>
+</head>
+<body>
+  <header>
+    <h1>CompareXT</h1>
+    <span id="product-count"></span>
+    <button id="clear-all-btn">Clear All</button>
+  </header>
+  <div id="compare-wrapper">
+    <div id="compare-table"></div>
+  </div>
+  <div id="empty-state" style="display:none">
+    <span>No products to compare.</span>
+    <span>Visit an Amazon product page and click "Add to Compare".</span>
+  </div>
+  <script src="db.js"></script>
+  <script src="compare.js"></script>
+</body>
+</html>
