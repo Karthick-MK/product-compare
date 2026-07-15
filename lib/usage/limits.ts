@@ -2,8 +2,8 @@ import { db } from '@/lib/db/prisma'
 import type { Plan, UsageLimits } from '@/types'
 
 const PLAN_LIMITS: Record<Plan, UsageLimits> = {
-  admin: { maxComparisons: null, maxAiCallsPerMonth: null, maxProductsPerComparison: 6 },
-  free:  { maxComparisons: 3,    maxAiCallsPerMonth: 10,   maxProductsPerComparison: 3 },
+  admin: { maxComparisons: null, maxAiCallsPerMonth: null, maxProductsPerComparison: null },
+  free:  { maxComparisons: 3,    maxAiCallsPerMonth: 10,   maxProductsPerComparison: parseInt(process.env.FREE_MAX_PRODUCTS ?? '3') },
   pro:   { maxComparisons: null, maxAiCallsPerMonth: 100,  maxProductsPerComparison: 6 },
 }
 
@@ -50,6 +50,6 @@ export async function checkComparisonLimit(workspaceId: string, plan: string): P
   }
 }
 
-export function getMaxProducts(plan: string): number {
+export function getMaxProducts(plan: string): number | null {
   return (PLAN_LIMITS[plan as Plan] ?? PLAN_LIMITS.free).maxProductsPerComparison
 }

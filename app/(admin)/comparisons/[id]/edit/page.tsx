@@ -37,7 +37,10 @@ export default function EditComparisonPage() {
     })
     setSaving(false)
     if (res.ok) { await load(); toast('Saved') }
-    else toast('Save failed', 'error')
+    else {
+      const { error } = await res.json().catch(() => ({ error: null }))
+      toast(error ?? 'Save failed', 'error')
+    }
   }
 
   async function togglePublish() {

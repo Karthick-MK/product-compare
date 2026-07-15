@@ -20,11 +20,20 @@ export async function fetchProductFromUrl(url: string): Promise<FetchedProductDa
 
   const markdown: string = await response.text()
 
-  // Title: try H1, then first bold, then first non-empty line
-  const h1Match = markdown.match(/^#\s+(.+)$/m)
-  const boldMatch = markdown.match(/\*\*(.{10,100})\*\*/)
-  const firstLine = markdown.split('\n').find(l => l.trim().length > 10)?.trim()
-  const name = (h1Match?.[1] ?? boldMatch?.[1] ?? firstLine ?? 'Unknown Product').trim()
+  // Nav/site-name lines to skip when extracting product name
+  const navPattern = /amazon\.com|flipkart|myntra|meesho|results for|skip to|back to|sign in|my cart|wish\s*list|homepage|just a moment|^\s*home\s*$/i
+
+  // All H1/H2 headings, pick first one that looks like a product title
+  const headings = Array.from(markdown.matchAll(/^#{1,2}\s+(.+)$/gm))
+    .map(m => m[1].replace(/\*\*/g, '').trim())
+    .filter(l => l.length > 15 && l.length < 300 && !navPattern.test(l))
+
+  const boldMatch = markdown.match(/\*\*([^*]{15,200})\*\*/)
+  const firstMeaningfulLine = markdown.split('\n')
+    .map(l => l.replace(/^#+\s*/, '').trim())
+    .find(l => l.length > 20 && !navPattern.test(l))
+
+  const name = (headings[0] ?? boldMatch?.[1] ?? firstMeaningfulLine ?? 'Unknown Product').trim()
 
   // Image: first real image URL (skip tiny icons < 50 chars)
   const imageRegex = /!\[.*?\]\((https?:\/\/[^\s)]{30,})\)/g

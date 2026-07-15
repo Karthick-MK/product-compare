@@ -61,10 +61,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const input = updateSchema.parse(body)
     const { products, ...comparisonFields } = input
 
-    if (products && products.length > getMaxProducts(workspace.plan)) {
+    const maxProducts = getMaxProducts(workspace.plan)
+    if (products && maxProducts !== null && products.length > maxProducts) {
       return NextResponse.json(
-        { error: `Maximum ${getMaxProducts(workspace.plan)} products allowed on your plan` },
-        { status: 400 }
+        { error: `Maximum ${maxProducts} products allowed on your plan` },
+        { status: 429 }
       )
     }
 

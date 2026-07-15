@@ -93,5 +93,5 @@ export interface GeneratedComparison {
 export interface UsageLimits {
   maxComparisons: number | null  // null = unlimited
   maxAiCallsPerMonth: number | null
-  maxProductsPerComparison: number
+  maxProductsPerComparison: number | null
 }

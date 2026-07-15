@@ -10,15 +10,22 @@ export async function getCurrentWorkspace(): Promise<Workspace> {
     where: { ownerUserId: userId },
   })
 
+  const isAdmin = userId === process.env.ADMIN_CLERK_USER_ID
+
   if (!workspace) {
-    // Auto-create workspace on first login
     workspace = await db.workspace.create({
       data: {
         ownerUserId: userId,
-        slug: userId.slice(-8), // temp slug, user can change later
-        plan: 'free',
+        slug: userId.slice(-8),
+        plan: isAdmin ? 'admin' : 'free',
         brandingEnabled: true,
       },
+    })
+  } else if (isAdmin && workspace.plan !== 'admin') {
+    // Upgrade existing workspace to admin if env var set
+    workspace = await db.workspace.update({
+      where: { id: workspace.id },
+      data: { plan: 'admin' },
     })
   }
 
