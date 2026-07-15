@@ -69,7 +69,7 @@ export default function EditComparisonPage() {
   if (!comparison) return <EditPageSkeleton />
 
   return (
-    <div className="max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
