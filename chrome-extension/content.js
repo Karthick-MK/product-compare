@@ -22,18 +22,23 @@
     const products = await DB.getAll();
     const thumbs = document.getElementById("cxt-bar-thumbs");
     const compareBtn = document.getElementById("cxt-compare-btn");
-    thumbs.innerHTML = products.map(p => `
-      <img class="cxt-thumb" src="${p.image || ''}" title="${p.title}" data-asin="${p.asin}" onerror="this.style.display='none'"/>
-    `).join("");
-    compareBtn.textContent = `COMPARE (${products.length})`;
-    compareBtn.disabled = products.length < 2;
-    thumbs.querySelectorAll(".cxt-thumb").forEach(img => {
+    thumbs.innerHTML = "";
+    products.forEach(p => {
+      const img = document.createElement("img");
+      img.className = "cxt-thumb";
+      img.setAttribute("src", p.image || "");
+      img.setAttribute("title", p.title || "");
+      img.setAttribute("data-asin", p.asin);
+      img.addEventListener("error", () => { img.style.display = "none"; });
       img.addEventListener("click", async () => {
         await DB.removeProduct(img.dataset.asin);
         await renderBar();
-        updateAddBtn();
+        await updateAddBtn();
       });
+      thumbs.appendChild(img);
     });
+    compareBtn.textContent = `COMPARE (${products.length})`;
+    compareBtn.disabled = products.length < 2;
   }
 
   document.getElementById("cxt-compare-btn").addEventListener("click", () => {
@@ -42,7 +47,7 @@
   document.getElementById("cxt-clear-btn").addEventListener("click", async () => {
     await DB.clear();
     await renderBar();
-    updateAddBtn();
+    await updateAddBtn();
   });
 
   await renderBar();
@@ -99,20 +104,8 @@
   }
 
   function getFallbackConfig() {
-    return {
-      site: "amazon",
-      baseUrl: location.origin,
-      extractAsin: url => (url.match(/\/dp\/([A-Z0-9]{10})/) || [])[1] || null,
-      scrape: {
-        title: "#productTitle",
-        priceWhole: ".a-price-whole",
-        priceFraction: ".a-price-fraction",
-        image: "#landingImage",
-        rating: ".a-icon-alt",
-        reviewCount: "#acrCustomerReviewText",
-        bullets: "#feature-bullets li .a-list-item",
-      },
-    };
+    const base = getSiteConfig("amazon.in");
+    return { ...base, baseUrl: location.origin };
   }
 
   addBtn = createAddBtn();
@@ -130,6 +123,8 @@
   }
 
   function injectFallbackPill() {
+    addBtn.style.cssText = "position:fixed;left:-9999px;top:-9999px;";
+    document.body.appendChild(addBtn);
     const pill = document.createElement("button");
     pill.id = "cxt-fallback-pill";
     pill.textContent = "+ Add to Compare";
