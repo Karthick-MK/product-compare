@@ -61,7 +61,7 @@
   }
 
   function buildAffiliateUrl(asin, siteConfig) {
-    const AFFILIATE_TAG = "YOUR-TAG-HERE";
+    const AFFILIATE_TAG = "karthickcart-21";
     return `${siteConfig.baseUrl}/dp/${asin}?tag=${AFFILIATE_TAG}`;
   }
 
