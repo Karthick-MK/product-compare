@@ -45,9 +45,15 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
   }
 
   function updateSpec(productIdx: number, specKey: string, value: string) {
-    setLocal(prev => prev.map((p, i) => i !== productIdx ? p : {
-      ...p,
-      specs: p.specs?.map(s => s.specKey === specKey ? { ...s, specValue: value } : s) ?? [],
+    setLocal(prev => prev.map((p, i) => {
+      if (i !== productIdx) return p
+      const existing = p.specs?.some(s => s.specKey === specKey)
+      return {
+        ...p,
+        specs: existing
+          ? p.specs!.map(s => s.specKey === specKey ? { ...s, specValue: value } : s)
+          : [...(p.specs ?? []), { id: `new-${specKey}-${p.id}`, productId: p.id, specKey, specValue: value }],
+      }
     }))
     setDirty(true)
   }
