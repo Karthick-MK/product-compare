@@ -72,6 +72,25 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
     setDirty(true)
   }
 
+  function addProCon(productIdx: number, type: 'pro' | 'con') {
+    setLocal(prev => prev.map((p, i) => {
+      if (i !== productIdx) return p
+      const existing = p.prosCons ?? []
+      const position = existing.filter(pc => pc.type === type).length
+      const newId = `new-${type}-${p.id}-${position}`
+      return { ...p, prosCons: [...existing, { id: newId, productId: p.id, type, text: '', position }] }
+    }))
+    setDirty(true)
+  }
+
+  function removeProCon(productIdx: number, pcId: string) {
+    setLocal(prev => prev.map((p, i) => i !== productIdx ? p : {
+      ...p,
+      prosCons: (p.prosCons ?? []).filter(pc => pc.id !== pcId),
+    }))
+    setDirty(true)
+  }
+
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between h-6">
@@ -128,17 +147,26 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
               {local.map((p, pi) => (
                 <td key={p.id} className="px-3 py-2 border-l border-outline-variant border-t-2 border-t-secondary">
                   <ul className="space-y-1">
-                    {p.prosCons?.filter(pc => pc.type === 'pro').map(pc => (
-                      <li key={pc.id} className="flex items-start gap-1">
+                    {(p.prosCons ?? []).filter(pc => pc.type === 'pro').map(pc => (
+                      <li key={pc.id} className="flex items-start gap-1 group">
                         <span className="text-secondary text-xs mt-0.5">✓</span>
                         <InlineEditCell
                           value={pc.text}
                           onSave={val => updateProsCons(pi, pc.id, val)}
-                          className="text-xs text-on-surface"
+                          className="text-xs text-on-surface flex-1"
                         />
+                        <button
+                          onClick={() => removeProCon(pi, pc.id)}
+                          className="opacity-0 group-hover:opacity-100 text-xs text-on-surface-variant hover:text-tertiary transition-opacity ml-1"
+                          title="Remove"
+                        >✕</button>
                       </li>
                     ))}
                   </ul>
+                  <button
+                    onClick={() => addProCon(pi, 'pro')}
+                    className="mt-1 text-xs text-secondary/60 hover:text-secondary transition-colors"
+                  >+ add pro</button>
                 </td>
               ))}
             </tr>
@@ -149,17 +177,26 @@ export function EditableComparisonTable({ products, comparisonId, onSaved }: Pro
               {local.map((p, pi) => (
                 <td key={p.id} className="px-3 py-2 border-l border-outline-variant border-t-2 border-t-tertiary">
                   <ul className="space-y-1">
-                    {p.prosCons?.filter(pc => pc.type === 'con').map(pc => (
-                      <li key={pc.id} className="flex items-start gap-1">
+                    {(p.prosCons ?? []).filter(pc => pc.type === 'con').map(pc => (
+                      <li key={pc.id} className="flex items-start gap-1 group">
                         <span className="text-tertiary text-xs mt-0.5">✕</span>
                         <InlineEditCell
                           value={pc.text}
                           onSave={val => updateProsCons(pi, pc.id, val)}
-                          className="text-xs text-on-surface"
+                          className="text-xs text-on-surface flex-1"
                         />
+                        <button
+                          onClick={() => removeProCon(pi, pc.id)}
+                          className="opacity-0 group-hover:opacity-100 text-xs text-on-surface-variant hover:text-tertiary transition-opacity ml-1"
+                          title="Remove"
+                        >✕</button>
                       </li>
                     ))}
                   </ul>
+                  <button
+                    onClick={() => addProCon(pi, 'con')}
+                    className="mt-1 text-xs text-tertiary/60 hover:text-tertiary transition-colors"
+                  >+ add con</button>
                 </td>
               ))}
             </tr>
