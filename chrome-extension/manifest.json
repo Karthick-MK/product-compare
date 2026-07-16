@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*"],
-      "js": ["db.js", "sites.js", "content.js"],
+      "js": ["db.js", "sites/amazon.js", "sites.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }
