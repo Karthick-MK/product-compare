@@ -10,28 +10,31 @@ function getSiteConfig(hostname) {
 
 function scrapeProduct(siteConfig) {
   const s = siteConfig.scrape;
+  // Empty/missing selectors are skipped (querySelector("") would throw).
+  const q  = sel => (sel ? document.querySelector(sel) : null);
+  const qa = sel => (sel ? document.querySelectorAll(sel) : []);
   const asin = siteConfig.extractAsin(location.href);
 
-  const titleEl = document.querySelector(s.title);
+  const titleEl = q(s.title);
   const title = titleEl ? titleEl.textContent.trim() : "";
 
-  const wholeEl = document.querySelector(s.priceWhole);
-  const fracEl  = document.querySelector(s.priceFraction);
+  const wholeEl = q(s.priceWhole);
+  const fracEl  = q(s.priceFraction);
   // ponytail: assumes Amazon price format "₹X,XXX" whole+fraction split
   const price = wholeEl
     ? (wholeEl.textContent.trim().replace(/\D/g, "") + "." + (fracEl ? fracEl.textContent.trim() : "00"))
     : "";
 
-  const imageEl = document.querySelector(s.image);
+  const imageEl = q(s.image);
   const image   = imageEl ? (imageEl.src || imageEl.getAttribute("data-old-hires") || "") : "";
 
-  const ratingEl = document.querySelector(s.rating);
+  const ratingEl = q(s.rating);
   const rating   = ratingEl ? ratingEl.textContent.trim() : "";
 
-  const reviewEl    = document.querySelector(s.reviewCount);
+  const reviewEl    = q(s.reviewCount);
   const reviewCount = reviewEl ? reviewEl.textContent.trim() : "";
 
-  const bulletEls = document.querySelectorAll(s.bullets);
+  const bulletEls = qa(s.bullets);
   const bullets = Array.from(bulletEls)
     .map(el => el.textContent.trim())
     .filter(t => t.length > 0)

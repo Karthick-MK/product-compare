@@ -176,6 +176,7 @@
     let injected = false;
     if (siteConfig) {
       for (const sel of siteConfig.buttonAnchor.split(',').map(s => s.trim())) {
+        if (!sel) continue; // no anchor configured (e.g. Flipkart) → fall through to pill
         const anchor = document.querySelector(sel);
         // Skip anchors hidden inside collapsed accordion tabs or display:none containers
         if (anchor && !anchor.closest('.aok-hidden') && !anchor.closest('[aria-hidden="true"]')) {
