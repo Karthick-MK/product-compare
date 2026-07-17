@@ -28,29 +28,49 @@ window.SITE_REGISTRY["flipkart.com"] = {
   // Flipkart affiliate — no tag yet; uses direct product URL
   buildAffiliateUrl: pid => `https://www.flipkart.com/product/p/itm?pid=${pid}`,
 
-  // --- Card (listing / search pages) ---
-  // data-tkid format on each card: "UUID.PID.TYPE"
-  cardSelector: '[data-tkid]',
+  // --- Card (listing / search / recommendation carousels) ---
+  // Grid cards carry data-tkid ("UUID.PID.TYPE"); recommendation carousels
+  // ("explore more like this") are bare <a href=".../p/itm…"> with no data-tkid.
+  cardSelector: '[data-tkid], a[href*="/p/itm"]',
 
   extractCardId: cardEl => {
-    // Skip section wrappers — only process innermost data-tkid elements
+    // Skip anchors/cards nested inside a data-tkid grid card (the grid card handles them)
     if (cardEl.parentElement && cardEl.parentElement.closest('[data-tkid]')) return null;
-    const tkid = cardEl.dataset.tkid;
+    const tkid = cardEl.dataset ? cardEl.dataset.tkid : null;
     if (tkid) {
       const parts = tkid.split('.');
       // Require exactly "UUID.PID.TYPE" — skips wrappers with non-standard formats
       if (parts.length === 3 && /^[A-Z0-9]+$/.test(parts[1])) return parts[1];
     }
-    const link = cardEl.querySelector('a[href*="/p/"]');
-    if (link) {
-      const m = link.getAttribute('href').match(/[?&]pid=([A-Z0-9]+)/);
+    // Anchor card itself, or a grid card's inner product link
+    const href = cardEl.matches('a[href]')
+      ? cardEl.getAttribute('href')
+      : (cardEl.querySelector('a[href*="/p/"]') || {}).getAttribute?.('href');
+    if (href) {
+      const m = href.match(/[?&]pid=([A-Z0-9]+)/);
       if (m) return m[1];
+      const itm = href.match(/\/p\/(itm[a-z0-9]+)/i);
+      if (itm) return itm[1];
     }
     return null;
   },
 
   scrapeCard: cardEl => {
-    // Class names may change; update here when Flipkart rotates them
+    // Recommendation-carousel cards are bare <a> tags — grab image/title only;
+    // enrichProduct fills price/rating/specs from the product page on compare.
+    if (cardEl.matches('a[href]')) {
+      const img = cardEl.querySelector('img');
+      return {
+        title:       img && img.getAttribute('alt') ? img.getAttribute('alt').trim()
+                                                     : (cardEl.getAttribute('title') || '').trim(),
+        image:       img ? img.src : "",
+        price:       "",
+        rating:      "",
+        reviewCount: "",
+        detailPath:  (cardEl.getAttribute('href') || '').split('?')[0] || null,
+      };
+    }
+    // Grid card. Class names may change; update here when Flipkart rotates them
     const linkEl   = cardEl.querySelector('a.GnxRXv') || cardEl.querySelector('a[href*="/p/"]');
     const titleEl  = cardEl.querySelector('a.pIpigb') || cardEl.querySelector('[title]');
     const imageEl  = cardEl.querySelector('img.UCc1lI') || cardEl.querySelector('img');

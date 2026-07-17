@@ -213,6 +213,8 @@
     const cfg = siteConfig || getFallbackConfig();
     const id = cfg.extractCardId ? cfg.extractCardId(cardEl) : null;
     if (!id || cardEl.querySelector(".cxt-card-btn")) return;
+    // Dedup across the page: same product can appear as multiple cards/anchors
+    if (document.querySelector('.cxt-card-btn[data-asin="' + id + '"]')) return;
 
     const btn = document.createElement("button");
     btn.className = "cxt-card-btn";
@@ -271,6 +273,8 @@
       deliveryEl.parentNode.insertBefore(btn, deliveryEl.nextSibling);
     } else if (atcEl && atcEl.parentNode) {
       atcEl.parentNode.insertBefore(btn, atcEl);
+    } else if (cardEl.tagName === 'A' && cardEl.parentNode) {
+      cardEl.parentNode.insertBefore(btn, cardEl.nextSibling); // don't nest a <button> inside <a>
     } else {
       cardEl.appendChild(btn);
     }
