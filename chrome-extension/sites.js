@@ -40,9 +40,11 @@ function scrapeProduct(siteConfig) {
   return { asin, title, price, image, rating, reviewCount, bullets };
 }
 
-function buildAffiliateUrl(asin, siteConfig) {
+function buildAffiliateUrl(id, siteConfig) {
+  if (siteConfig.buildAffiliateUrl) return siteConfig.buildAffiliateUrl(id);
+  // Amazon default: add-to-cart URL with affiliate tag
   const AFFILIATE_TAG = "karthickcart-21";
-  return `${siteConfig.baseUrl}/gp/aws/cart/add.html?ASIN.1=${asin}&Quantity.1=1&tag=${AFFILIATE_TAG}`;
+  return `${siteConfig.baseUrl}/gp/aws/cart/add.html?ASIN.1=${id}&Quantity.1=1&tag=${AFFILIATE_TAG}`;
 }
 
 window.getSiteConfig     = getSiteConfig;

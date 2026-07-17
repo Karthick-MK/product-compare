@@ -11,7 +11,8 @@
   "permissions": ["storage"],
   "host_permissions": [
     "*://*.amazon.in/*",
-    "*://*.amazon.com/*"
+    "*://*.amazon.com/*",
+    "*://*.flipkart.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -20,6 +21,12 @@
     {
       "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*"],
       "js": ["db.js", "sites/amazon.js", "sites.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.flipkart.com/*"],
+      "js": ["db.js", "sites/flipkart.js", "sites.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }
@@ -34,7 +41,7 @@
   "web_accessible_resources": [
     {
       "resources": ["compare.html"],
-      "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*"]
+      "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*", "*://*.flipkart.com/*"]
     }
   ]
 }

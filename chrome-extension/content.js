@@ -154,32 +154,16 @@
     });
   }
 
-  const CARD_SELECTOR = [
-    '[data-component-type="s-search-result"][data-asin]', // standard search results
-    '[data-csa-c-item-type="asin"][data-asin]',           // p13n mission/blended widgets (with data-asin)
-    '[data-csa-c-item-type="asin"][data-csa-c-item-id^="amzn1.asin."]',  // buy-again / carousel widgets (ASIN in item-id)
-    '.s-card-container',                                   // standard listing cards
-    '[class*="_cDEzb_productContainer_"]',                 // carousel/recommendation cards
-  ].join(', ');
+  const CARD_SELECTOR = siteConfig ? siteConfig.cardSelector : '';
 
   async function injectCardBtn(cardEl) {
-    // data-asin present on p13n/search cards; extract from href on s-card-container cards;
-    // buy-again/carousel cards use data-csa-c-item-id="amzn1.asin.XXXXXXXXXX"
-    let asin = cardEl.dataset.asin;
-    if (!asin && cardEl.dataset.csaCItemId && cardEl.dataset.csaCItemId.startsWith('amzn1.asin.')) {
-      const candidate = cardEl.dataset.csaCItemId.split('.').pop();
-      if (/^[A-Z0-9]{10}$/.test(candidate)) asin = candidate;
-    }
-    if (!asin) {
-      const dpLink = cardEl.querySelector('a[href*="/dp/"]');
-      const m = dpLink && dpLink.getAttribute('href').match(/\/dp\/([A-Z0-9]{10})/);
-      asin = m ? m[1] : null;
-    }
-    if (!asin || cardEl.querySelector(".cxt-card-btn")) return;
+    const cfg = siteConfig || getFallbackConfig();
+    const id = cfg.extractCardId ? cfg.extractCardId(cardEl) : null;
+    if (!id || cardEl.querySelector(".cxt-card-btn")) return;
 
     const btn = document.createElement("button");
     btn.className = "cxt-card-btn";
-    btn.dataset.asin = asin;
+    btn.dataset.asin = id;
     btn.textContent = "Add to Compare";
 
     btn.addEventListener("click", async (e) => {
@@ -187,11 +171,10 @@
       e.stopPropagation();
       btn.disabled = true;
       try {
-        const alreadyAdded = await DB.hasProduct(asin);
+        const alreadyAdded = await DB.hasProduct(id);
         if (alreadyAdded) {
-          await DB.removeProduct(asin);
+          await DB.removeProduct(id);
         } else {
-          const cfg = siteConfig || getFallbackConfig();
           const count = await DB.getCount();
           if (count >= 10) {
             const bar = document.getElementById("cxt-bar");
@@ -202,41 +185,20 @@
             btn.disabled = false;
             return;
           }
-          const affiliateUrl = buildAffiliateUrl(asin, cfg);
-
-          // Prefer card-level data-* attributes (p13n cards expose them directly)
-          const detailPath = cardEl.dataset.detailPageUrl || `/dp/${asin}`;
-          const dataPrice = cardEl.dataset.price;
-          const dataStars = cardEl.dataset.reviewStarCount;
-          const dataReviews = cardEl.dataset.reviewCount;
-
-          // Scrape inner DOM as fallback
-          const titleEl = cardEl.querySelector("h2 a span") ||
-                          cardEl.querySelector("[data-click-el='title']") ||
-                          cardEl.querySelector("span.a-truncate-cut");
-          const imageEl = cardEl.querySelector(".s-image") || cardEl.querySelector("img");
-          const wholeEl = cardEl.querySelector(".a-price-whole");
-          const fracEl = cardEl.querySelector(".a-price-fraction");
-          const ratingEl = cardEl.querySelector(".a-icon-alt");
-
-          const price = dataPrice
-            ? dataPrice + ".00"
-            : wholeEl ? (wholeEl.textContent.replace(/\D/g, "") + "." + (fracEl ? fracEl.textContent.trim() : "00")) : "";
-
-          const rating = dataStars
-            ? dataStars + " out of 5 stars"
-            : ratingEl ? ratingEl.textContent.trim() : "";
-
+          const scraped = cfg.scrapeCard ? cfg.scrapeCard(cardEl) : {};
+          const affiliateUrl = buildAffiliateUrl(id, cfg);
           await DB.addProduct({
-            asin,
-            site: cfg.site || "amazon",
-            title: titleEl ? titleEl.textContent.trim() : "",
-            price,
-            image: imageEl ? imageEl.src : "",
-            rating,
-            reviewCount: dataReviews || "",
+            asin: id,
+            site: cfg.site || "unknown",
+            title: scraped.title || "",
+            price: scraped.price || "",
+            image: scraped.image || "",
+            rating: scraped.rating || "",
+            reviewCount: scraped.reviewCount || "",
             bullets: [],
-            url: cfg.baseUrl + detailPath,
+            url: scraped.detailPath
+              ? (scraped.detailPath.startsWith('http') ? scraped.detailPath : cfg.baseUrl + scraped.detailPath)
+              : location.href,
             affiliateUrl,
             addedAt: Date.now(),
           });
@@ -249,8 +211,7 @@
       }
     });
 
-    // Standard search card: insert after delivery section
-    // p13n card: insert before the Add to Cart section
+    // Generic insertion: after delivery section (Amazon), before ATC button, else append
     const deliveryEl = cardEl.querySelector('[data-cy="delivery-recipe"]');
     const atcEl = cardEl.querySelector('[aria-label^="Add to Cart"]');
     if (deliveryEl && deliveryEl.parentNode) {
