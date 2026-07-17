@@ -62,13 +62,11 @@ header span { font-size: 12px; color: #c2c6d6; }
 #empty-state span:last-child { font-size: 13px; color: #424754; }
 
 #page-footer {
-  flex: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 24px;
-  background: #0b1326;
+  gap: 32px;
+  margin-top: 24px;
+  padding: 16px 0;
   border-top: 1px solid #424754;
 }
 .footer-left { display: flex; flex-direction: column; gap: 2px; }

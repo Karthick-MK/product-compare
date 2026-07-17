@@ -112,8 +112,8 @@
 }
 #cxt-tab {
   flex-shrink: 0;
-  background: #4d2fe0;
-  color: #fff;
+  background: #ff9900;
+  color: #0b1326;
   border: none;
   cursor: pointer;
   padding: 16px 10px;
@@ -132,7 +132,8 @@
   transform: rotate(180deg);
 }
 #cxt-tab-count {
-  background: #2a1a80;
+  background: #0b1326;
+  color: #ff9900;
   border-radius: 4px;
   padding: 2px 6px;
   font-size: 12px;
@@ -219,8 +220,8 @@
 }
 #cxt-compare-btn {
   flex: 1;
-  background: #4d2fe0;
-  color: #fff;
+  background: #ff9900;
+  color: #0b1326;
   border: none;
   border-radius: 24px;
   padding: 12px;
@@ -230,7 +231,7 @@
   cursor: pointer;
 }
 #cxt-compare-btn:disabled {
-  background: #b6aef0;
+  background: #ffd98a;
   cursor: default;
 }
 #cxt-clear-btn {
