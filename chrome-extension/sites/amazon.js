@@ -49,7 +49,8 @@ const _amazon = {
     const dataStars   = cardEl.dataset.reviewStarCount;
     const dataReviews = cardEl.dataset.reviewCount;
 
-    const titleEl  = cardEl.querySelector("h2 a span") ||
+    const titleEl  = cardEl.querySelector("h2 span") ||
+                     cardEl.querySelector("h2") ||
                      cardEl.querySelector("[data-click-el='title']") ||
                      cardEl.querySelector("span.a-truncate-cut");
     const imageEl  = cardEl.querySelector(".s-image") || cardEl.querySelector("img");
