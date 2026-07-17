@@ -4,7 +4,9 @@ body {
   font-family: "Inter", -apple-system, sans-serif;
   background: #0b1326;
   color: #dae2fd;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -27,6 +29,13 @@ header h1 {
   letter-spacing: -0.01em;
 }
 header span { font-size: 12px; color: #c2c6d6; }
+#product-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff9900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 #clear-all-btn {
   background: transparent;
   border: 1px solid #424754;
@@ -52,16 +61,53 @@ header span { font-size: 12px; color: #c2c6d6; }
 }
 #empty-state span:last-child { font-size: 13px; color: #424754; }
 
+#page-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  background: #0b1326;
+  border-top: 1px solid #424754;
+}
+.footer-left { display: flex; flex-direction: column; gap: 2px; }
+.footer-brand {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #adc6ff;
+}
+.footer-copy { font-size: 12px; color: #8b97b2; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c2c6d6;
+  text-decoration: none;
+}
+.footer-links a:hover { color: #adc6ff; }
+
 #compare-wrapper {
-  overflow-x: auto;
-  padding: 24px;
+  flex: 1;
+  overflow: auto;
+  padding: 0 24px 24px;
 }
 #compare-table {
   display: block;
   min-width: max-content;
 }
+#page-title {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #dae2fd;
+  margin: 20px 0 16px;
+}
 
 .product-col {
+  position: relative;
   width: 240px;
   background: #131b2e;
   border: 1px solid #424754;
@@ -70,8 +116,7 @@ header span { font-size: 12px; color: #c2c6d6; }
   flex-direction: column;
   transition: background 0.15s;
 }
-.compare-headers-row .product-col:first-of-type { border-radius: 10px 0 0 0; }
-.compare-headers-row .product-col:last-child { border-right: 1px solid #424754; border-radius: 0 10px 0 0; }
+.compare-headers-row .product-col:last-child { border-right: 1px solid #424754; }
 .product-col:hover { background: #1a2540; }
 
 .col-image-wrap {
@@ -181,18 +226,26 @@ header span { font-size: 12px; color: #c2c6d6; }
 }
 .buy-btn:hover { background: #ffb347; }
 .remove-btn {
-  display: block;
-  text-align: center;
-  background: transparent;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e11d2a;
+  color: #fff;
   border: none;
-  color: #424754;
-  font-size: 11px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1;
   cursor: pointer;
-  padding: 3px;
   font-family: inherit;
-  transition: color 0.15s;
+  transition: background 0.15s;
 }
-.remove-btn:hover { color: #ffb2b7; }
+.remove-btn:hover { background: #ff516a; }
 
 /* --- Header controls --- */
 #enrich-badge {
@@ -223,13 +276,48 @@ header span { font-size: 12px; color: #c2c6d6; }
 }
 
 /* --- Compare layout --- */
+/* Sticky single-line title bar: only the product heading stays pinned on scroll */
+.compare-title-row {
+  display: flex;
+  align-items: stretch;
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+.title-cell {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background: #131b2e;
+  border-top: 1px solid #424754;
+  border-bottom: 1px solid #424754;
+  border-left: 1px solid #424754;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title-cell:last-child { border-right: 1px solid #424754; border-radius: 0 10px 0 0; }
+.title-cell.col-hover { background: #1a2540; }
+.compare-title-row .label-spacer { border-radius: 10px 0 0 0; }
+
+/* Full product cards scroll normally (not sticky) */
 .compare-headers-row {
   display: flex;
   align-items: stretch;
 }
+/* Frozen top-left corner: sticky both axes, sits above everything */
 .label-spacer {
   width: 160px;
   flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #0d1424;
 }
 
 /* Site badge inside product card */
@@ -259,18 +347,33 @@ header span { font-size: 12px; color: #c2c6d6; }
   border-top: 1px solid #1e2d45;
 }
 .spec-row:last-child { border-radius: 0 0 10px 10px; }
-.spec-row.diff { background: #131b2e; }
-.spec-row.same { background: #0d1626; }
+/* Zebra striping: alternating row backgrounds (tonal layering per design system) */
+.spec-row:nth-of-type(odd)  { background: #0d1424; }
+.spec-row:nth-of-type(even) { background: #131b2e; }
+/* Row hover: brighten (hover = increased brightness, not shadow) */
+.spec-row:hover { background: #1b2440; }
+/* Column hover: subtle white tint layered over the row background */
+.spec-val.col-hover { background: rgba(173, 198, 255, 0.07); }
+.product-col.col-hover { background: #1a2540; }
 .spec-key {
   width: 160px;
   flex-shrink: 0;
   padding: 9px 12px;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 700;
   font-family: "JetBrains Mono", monospace;
-  color: #8b97b2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ff9900;
   border-right: 1px solid #1e2d45;
   line-height: 1.4;
+  /* Sticky first column: freezes spec labels on horizontal scroll */
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #0d1424;
 }
+.spec-row:hover .spec-key { background: #1b2440; }
 .spec-val {
   width: 240px;
   flex-shrink: 0;
@@ -281,4 +384,19 @@ header span { font-size: 12px; color: #c2c6d6; }
 }
 .spec-val:last-child { border-right: none; }
 .spec-row.diff .spec-val { color: #dae2fd; }
-.spec-row.same .spec-val { color: #424754; }
+.spec-row.same .spec-val { color: #5b647d; }
+
+/* Loading skeleton (shown while spec tables are being fetched) */
+.skeleton-bar {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1a2540 25%, #2a3860 50%, #1a2540 75%);
+  background-size: 200% 100%;
+  animation: cxt-shimmer 1.2s ease-in-out infinite;
+}
+.spec-key .skeleton-bar { width: 65%; }
+.spec-val .skeleton-bar { width: 80%; }
+@keyframes cxt-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

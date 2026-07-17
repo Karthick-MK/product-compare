@@ -48,9 +48,10 @@ function allSame(values) {
 
 // --- Product header card ---
 
-function renderProductHeader(product) {
+function renderProductHeader(product, colIndex) {
   const col = el('div', 'product-col');
   col.dataset.asin = product.asin;
+  col.dataset.col = colIndex;
 
   const imageWrap = el('div', 'col-image-wrap');
   const imgLink = el('a');
@@ -72,10 +73,6 @@ function renderProductHeader(product) {
     body.appendChild(badge);
   }
 
-  const title = el('div', 'col-title');
-  title.textContent = product.title || 'Unknown product';
-  body.appendChild(title);
-
   const price = el('div', 'col-price');
   price.textContent = product.price ? '₹' + product.price : '—';
   body.appendChild(price);
@@ -96,21 +93,23 @@ function renderProductHeader(product) {
     body.appendChild(rating);
   }
 
+  const removeBtn = el('button', 'remove-btn');
+  removeBtn.textContent = '×';
+  removeBtn.title = 'Remove';
+  removeBtn.addEventListener('click', async () => {
+    await window.DB.removeProduct(product.asin);
+    render();
+  });
+
   const footer = el('div', 'col-footer');
   const buyBtn = el('a', 'buy-btn');
   buyBtn.href = product.affiliateUrl || product.url || '#';
   buyBtn.target = '_blank';
   buyBtn.rel = 'noopener';
   buyBtn.textContent = '🛒 View on Cart →';
-  const removeBtn = el('button', 'remove-btn');
-  removeBtn.textContent = 'Remove';
-  removeBtn.addEventListener('click', async () => {
-    await window.DB.removeProduct(product.asin);
-    render();
-  });
   footer.appendChild(buyBtn);
-  footer.appendChild(removeBtn);
 
+  col.appendChild(removeBtn);
   col.appendChild(imageWrap);
   col.appendChild(body);
   col.appendChild(footer);
@@ -122,10 +121,22 @@ function renderProductHeader(product) {
 function renderLayout(container, products) {
   container.innerHTML = '';
 
-  // Product header row
+  // Sticky single-line title bar (product headings only — stays readable while scrolling)
+  const titleRow = el('div', 'compare-title-row');
+  titleRow.appendChild(el('div', 'label-spacer'));
+  products.forEach((p, i) => {
+    const cell = el('div', 'title-cell');
+    cell.dataset.col = i;
+    cell.textContent = p.title || 'Unknown product';
+    cell.title = p.title || '';
+    titleRow.appendChild(cell);
+  });
+  container.appendChild(titleRow);
+
+  // Product header cards (scroll normally)
   const headersRow = el('div', 'compare-headers-row');
   headersRow.appendChild(el('div', 'label-spacer'));
-  products.forEach(p => headersRow.appendChild(renderProductHeader(p)));
+  products.forEach((p, i) => headersRow.appendChild(renderProductHeader(p, i)));
   container.appendChild(headersRow);
 
   // Spec table
@@ -144,8 +155,9 @@ function renderLayout(container, products) {
     const keyEl = el('div', 'spec-key');
     keyEl.textContent = key;
     row.appendChild(keyEl);
-    values.forEach(v => {
+    values.forEach((v, i) => {
       const val = el('div', 'spec-val');
+      val.dataset.col = i;
       val.textContent = v;
       row.appendChild(val);
     });
@@ -153,6 +165,25 @@ function renderLayout(container, products) {
   });
 
   container.appendChild(specSection);
+}
+
+// Placeholder spec rows shown while enrichment fetches spec tables.
+function renderSkeleton(container, colCount) {
+  const section = el('div', 'spec-section');
+  for (let r = 0; r < 8; r++) {
+    const row = el('div', 'spec-row');
+    const key = el('div', 'spec-key');
+    key.appendChild(el('div', 'skeleton-bar'));
+    row.appendChild(key);
+    for (let c = 0; c < colCount; c++) {
+      const val = el('div', 'spec-val');
+      val.dataset.col = c;
+      val.appendChild(el('div', 'skeleton-bar'));
+      row.appendChild(val);
+    }
+    section.appendChild(row);
+  }
+  container.appendChild(section);
 }
 
 // --- Main render ---
@@ -184,6 +215,7 @@ async function render() {
   const needsEnrich = products.some(p => !p.specTable || !Object.keys(p.specTable).length);
   if (needsEnrich) {
     if (enrichBadge) enrichBadge.style.display = 'inline-block';
+    if (!compareTable.querySelector('.spec-section')) renderSkeleton(compareTable, products.length);
     const enriched = await Promise.all(products.map(async p => {
       const result = await enrich(p);
       await window.DB.addProduct(result);
@@ -197,6 +229,19 @@ async function render() {
 // --- Event wiring ---
 
 document.getElementById('diff-toggle')?.addEventListener('change', render);
+
+// Column hover: highlight every cell sharing the hovered column index.
+// Delegated on the persistent table element (survives re-renders).
+const _table = document.getElementById('compare-table');
+function _clearColHover() {
+  _table.querySelectorAll('.col-hover').forEach(e => e.classList.remove('col-hover'));
+}
+_table.addEventListener('mouseover', e => {
+  const cell = e.target.closest('[data-col]');
+  _clearColHover();
+  if (cell) _table.querySelectorAll(`[data-col="${cell.dataset.col}"]`).forEach(e => e.classList.add('col-hover'));
+});
+_table.addEventListener('mouseleave', _clearColHover);
 
 document.getElementById('clear-all-btn').addEventListener('click', async () => {
   await window.DB.clear();
