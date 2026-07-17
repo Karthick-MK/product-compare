@@ -99,13 +99,6 @@
 .cxt-card-btn:disabled:not(.added)::before {
   opacity: 0.5;
 }
-#cxt-add-btn:disabled {
-  background: #94a3b8;
-  cursor: default;
-}
-#cxt-add-btn.added {
-  background: #16a34a;
-}
 
 #cxt-bar {
   position: fixed;

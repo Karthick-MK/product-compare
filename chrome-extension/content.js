@@ -59,24 +59,35 @@
   function createAddBtn() {
     const btn = document.createElement("button");
     btn.id = "cxt-add-btn";
+    btn.type = "button"; // prevent form submit (buy-box is a <form> → would navigate)
     btn.textContent = "Add to Compare";
-    btn.addEventListener("click", async () => {
-      if (btn.disabled) return;
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const cfg = siteConfig || getFallbackConfig();
+      const asin = cfg.extractAsin
+        ? cfg.extractAsin(location.href)
+        : (location.href.match(/\/dp\/([A-Z0-9]{10})/) || [])[1];
       try {
-        const scraped = scrapeProduct(siteConfig || getFallbackConfig());
-        if (!scraped.asin) { alert("Could not find product ID on this page."); return; }
-        const affiliateUrl = buildAffiliateUrl(scraped.asin, siteConfig || getFallbackConfig());
-        await DB.addProduct({
-          ...scraped,
-          site: (siteConfig || {}).site || "amazon",
-          url: location.href,
-          affiliateUrl,
-          addedAt: Date.now(),
-        });
+        if (asin && await DB.hasProduct(asin)) {
+          await DB.removeProduct(asin);
+        } else {
+          if (await DB.getCount() >= 10) { await updateAddBtn(); return; }
+          const scraped = scrapeProduct(cfg);
+          if (!scraped.asin) { alert("Could not find product ID on this page."); return; }
+          const affiliateUrl = buildAffiliateUrl(scraped.asin, cfg);
+          await DB.addProduct({
+            ...scraped,
+            site: (siteConfig || {}).site || "amazon",
+            url: location.href,
+            affiliateUrl,
+            addedAt: Date.now(),
+          });
+        }
         await updateAddBtn();
         await renderBar();
-      } catch (e) {
-        alert(e.message);
+      } catch (err) {
+        alert(err.message);
       }
     });
     return btn;
@@ -91,7 +102,7 @@
     const has = asin ? await DB.hasProduct(asin) : false;
     if (has) {
       addBtn.textContent = "Added to Compare";
-      addBtn.disabled = true;
+      addBtn.disabled = false;
       addBtn.classList.add("added");
     } else if (count >= 10) {
       addBtn.textContent = "Compare list full";
