@@ -100,69 +100,149 @@
   opacity: 0.5;
 }
 
-#cxt-bar {
+#cxt-widget {
   position: fixed;
-  bottom: 0;
-  left: 0;
   right: 0;
-  z-index: 999999;
-  background: #1e293b;
-  color: #fff;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2147483000;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.3);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 13px;
 }
-#cxt-bar-thumbs {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-  overflow: hidden;
-}
-.cxt-thumb {
-  width: 36px;
-  height: 36px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 2px solid #334155;
-  cursor: pointer;
+#cxt-tab {
   flex-shrink: 0;
-}
-.cxt-thumb:hover {
-  border-color: #ef4444;
-}
-#cxt-compare-btn {
-  background: #2563eb;
+  background: #4d2fe0;
   color: #fff;
   border: none;
-  border-radius: 20px;
-  padding: 8px 18px;
+  cursor: pointer;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px 0 0 8px;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.25);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+#cxt-tab-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+#cxt-tab-count {
+  background: #2a1a80;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+#cxt-panel {
+  width: 320px;
+  max-height: 70vh;
+  background: #fff;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cxt-collapsed #cxt-panel { display: none; }
+#cxt-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.cxt-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+.cxt-item:last-child { border-bottom: none; }
+.cxt-item-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+.cxt-item-info {
+  flex: 1;
+  min-width: 0;
+  padding-right: 22px;
+}
+.cxt-item-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cxt-item-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-top: 4px;
+}
+.cxt-item-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e11d2a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.cxt-item-remove:hover { background: #ff3b48; }
+#cxt-panel-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-top: 1px solid #eee;
+}
+#cxt-compare-btn {
+  flex: 1;
+  background: #4d2fe0;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+#cxt-compare-btn:disabled {
+  background: #b6aef0;
+  cursor: default;
+}
+#cxt-clear-btn {
+  background: transparent;
+  border: none;
+  color: #555;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
 }
-#cxt-compare-btn:disabled {
-  background: #475569;
-  cursor: default;
-}
-#cxt-clear-btn {
-  background: transparent;
-  color: #94a3b8;
-  border: 1px solid #475569;
-  border-radius: 20px;
-  padding: 8px 14px;
-  font-size: 13px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-#cxt-clear-btn:hover {
-  color: #ef4444;
-  border-color: #ef4444;
-}
+#cxt-clear-btn:hover { color: #e11d2a; }
 #cxt-fallback-pill {
   position: fixed;
   bottom: 80px;

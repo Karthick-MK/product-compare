@@ -9,37 +9,78 @@
     siteConfig && siteConfig.searchPattern && siteConfig.searchPattern.test(location.pathname)
   );
 
-  // --- Floating bar ---
+  // --- Floating compare widget (collapsible, right edge) ---
   const bar = document.createElement("div");
-  bar.id = "cxt-bar";
+  bar.id = "cxt-widget";
+  bar.className = "cxt-collapsed";
+  bar.style.display = "none";
   bar.innerHTML = `
-    <div id="cxt-bar-thumbs"></div>
-    <button id="cxt-compare-btn" disabled>COMPARE (0)</button>
-    <button id="cxt-clear-btn">× Clear</button>
+    <button id="cxt-tab">
+      <span id="cxt-tab-arrow">◀</span>
+      <span id="cxt-tab-label">COMPARE</span>
+      <span id="cxt-tab-count">0</span>
+    </button>
+    <div id="cxt-panel">
+      <div id="cxt-list"></div>
+      <div id="cxt-panel-footer">
+        <button id="cxt-compare-btn" disabled>COMPARE</button>
+        <button id="cxt-clear-btn">Remove all</button>
+      </div>
+    </div>
   `;
   document.body.appendChild(bar);
 
+  function setExpanded(expanded) {
+    bar.classList.toggle("cxt-collapsed", !expanded);
+    document.getElementById("cxt-tab-arrow").textContent = expanded ? "▶" : "◀";
+  }
+  document.getElementById("cxt-tab").addEventListener("click", () => {
+    setExpanded(bar.classList.contains("cxt-collapsed"));
+  });
+
   async function renderBar() {
     const products = await DB.getAll();
-    const thumbs = document.getElementById("cxt-bar-thumbs");
+    const list = document.getElementById("cxt-list");
     const compareBtn = document.getElementById("cxt-compare-btn");
-    thumbs.innerHTML = "";
+    list.innerHTML = "";
     products.forEach(p => {
-      const img = document.createElement("img");
-      img.className = "cxt-thumb";
-      img.setAttribute("src", p.image || "");
-      img.setAttribute("title", p.title || "");
-      img.setAttribute("data-asin", p.asin);
-      img.addEventListener("error", () => { img.style.display = "none"; });
-      img.addEventListener("click", async () => {
-        await DB.removeProduct(img.dataset.asin);
+      const item = document.createElement("div");
+      item.className = "cxt-item";
+
+      const thumb = document.createElement("img");
+      thumb.className = "cxt-item-thumb";
+      thumb.setAttribute("src", p.image || "");
+      thumb.addEventListener("error", () => { thumb.style.visibility = "hidden"; });
+
+      const info = document.createElement("div");
+      info.className = "cxt-item-info";
+      const name = document.createElement("div");
+      name.className = "cxt-item-name";
+      name.textContent = p.title || "Unknown product";
+      const price = document.createElement("div");
+      price.className = "cxt-item-price";
+      price.textContent = p.price ? "₹ " + p.price : "";
+      info.appendChild(name);
+      info.appendChild(price);
+
+      const remove = document.createElement("button");
+      remove.className = "cxt-item-remove";
+      remove.textContent = "×";
+      remove.addEventListener("click", async () => {
+        await DB.removeProduct(p.asin);
         await renderBar();
         await updateUI();
       });
-      thumbs.appendChild(img);
+
+      item.appendChild(thumb);
+      item.appendChild(info);
+      item.appendChild(remove);
+      list.appendChild(item);
     });
-    compareBtn.textContent = `COMPARE (${products.length})`;
+    document.getElementById("cxt-tab-count").textContent = products.length;
     compareBtn.disabled = products.length < 2;
+    bar.style.display = products.length ? "flex" : "none";
+    if (!products.length) setExpanded(false);
   }
 
   document.getElementById("cxt-compare-btn").addEventListener("click", () => {
@@ -188,7 +229,7 @@
         } else {
           const count = await DB.getCount();
           if (count >= 10) {
-            const bar = document.getElementById("cxt-bar");
+            const bar = document.getElementById("cxt-widget");
             if (bar) {
               bar.style.outline = "2px solid #ef4444";
               setTimeout(() => { bar.style.outline = ""; }, 1000);
