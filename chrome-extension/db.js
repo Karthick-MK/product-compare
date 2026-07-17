@@ -2,17 +2,30 @@
   const KEY = "compareXT_products";
   const MAX = 10;
 
+  function contextAlive() {
+    try { return !!chrome.runtime.id; } catch { return false; }
+  }
+
   async function load() {
+    if (!contextAlive()) return [];
     return new Promise(resolve => {
-      chrome.storage.local.get(KEY, result => {
-        resolve(result[KEY] || []);
-      });
+      try {
+        chrome.storage.local.get(KEY, result => {
+          resolve((chrome.runtime.lastError ? [] : result[KEY]) || []);
+        });
+      } catch { resolve([]); }
     });
   }
 
   async function save(products) {
+    if (!contextAlive()) return;
     return new Promise(resolve => {
-      chrome.storage.local.set({ [KEY]: products }, resolve);
+      try {
+        chrome.storage.local.set({ [KEY]: products }, () => {
+          if (chrome.runtime.lastError) console.warn('CompareXT save:', chrome.runtime.lastError);
+          resolve();
+        });
+      } catch { resolve(); }
     });
   }
 

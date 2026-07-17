@@ -71,6 +71,37 @@ const _amazon = {
       detailPath,
     };
   },
+
+  // --- Compare page enrichment ---
+  // Fetches the product detail page, extracts full title + bullets + spec table.
+  // Called from compare.html (extension page) which has host_permissions for amazon.
+  enrichProduct: async (product) => {
+    const origin = product.url.match(/https?:\/\/[^/]+/)?.[0] || 'https://www.amazon.in';
+    const url = `${origin}/dp/${product.asin}`;
+    const response = await fetch(url, { credentials: 'include' });
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    const titleEl = doc.querySelector('#productTitle');
+    if (titleEl) product.title = titleEl.textContent.trim();
+
+    const bulletEls = doc.querySelectorAll('#feature-bullets li .a-list-item');
+    if (bulletEls.length) {
+      product.bullets = Array.from(bulletEls)
+        .map(el => el.textContent.trim()).filter(Boolean).slice(0, 8);
+    }
+
+    // All prodDetTable tables (Item details, Measurements, Style, Materials & Care, etc.)
+    const specTable = {};
+    doc.querySelectorAll('table.prodDetTable tr').forEach(row => {
+      const key = row.querySelector('th.prodDetSectionEntry');
+      const val = row.querySelector('td.prodDetAttrValue');
+      if (key && val) specTable[key.textContent.trim()] = val.textContent.trim();
+    });
+    product.specTable = specTable;
+
+    return product;
+  },
 };
 
 window.SITE_REGISTRY["amazon.in"]  = _amazon;

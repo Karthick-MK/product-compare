@@ -57,8 +57,7 @@ header span { font-size: 12px; color: #c2c6d6; }
   padding: 24px;
 }
 #compare-table {
-  display: flex;
-  gap: 0;
+  display: block;
   min-width: max-content;
 }
 
@@ -71,8 +70,8 @@ header span { font-size: 12px; color: #c2c6d6; }
   flex-direction: column;
   transition: background 0.15s;
 }
-.product-col:first-child { border-radius: 10px 0 0 10px; }
-.product-col:last-child { border-right: 1px solid #424754; border-radius: 0 10px 10px 0; }
+.compare-headers-row .product-col:first-of-type { border-radius: 10px 0 0 0; }
+.compare-headers-row .product-col:last-child { border-right: 1px solid #424754; border-radius: 0 10px 0 0; }
 .product-col:hover { background: #1a2540; }
 
 .col-image-wrap {
@@ -194,3 +193,92 @@ header span { font-size: 12px; color: #c2c6d6; }
   transition: color 0.15s;
 }
 .remove-btn:hover { color: #ffb2b7; }
+
+/* --- Header controls --- */
+#enrich-badge {
+  display: none;
+  background: #0d2018;
+  color: #4edea3;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid #1e4a30;
+  white-space: nowrap;
+}
+.diff-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #8b97b2;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.diff-toggle-label input[type=checkbox] {
+  cursor: pointer;
+  accent-color: #4edea3;
+  width: 14px;
+  height: 14px;
+}
+
+/* --- Compare layout --- */
+.compare-headers-row {
+  display: flex;
+  align-items: stretch;
+}
+.label-spacer {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+/* Site badge inside product card */
+.col-site-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #4edea3;
+  background: #0d2018;
+  border: 1px solid #1e4a30;
+  border-radius: 4px;
+  padding: 2px 6px;
+  width: fit-content;
+  margin-bottom: 2px;
+}
+
+/* --- Spec table --- */
+.spec-section {
+  border-left: 1px solid #424754;
+  border-right: 1px solid #424754;
+  border-bottom: 1px solid #424754;
+  border-radius: 0 0 10px 10px;
+}
+.spec-row {
+  display: flex;
+  border-top: 1px solid #1e2d45;
+}
+.spec-row:last-child { border-radius: 0 0 10px 10px; }
+.spec-row.diff { background: #131b2e; }
+.spec-row.same { background: #0d1626; }
+.spec-key {
+  width: 160px;
+  flex-shrink: 0;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
+  color: #8b97b2;
+  border-right: 1px solid #1e2d45;
+  line-height: 1.4;
+}
+.spec-val {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 9px 16px;
+  font-size: 12px;
+  line-height: 1.4;
+  border-right: 1px solid #1e2d45;
+}
+.spec-val:last-child { border-right: none; }
+.spec-row.diff .spec-val { color: #dae2fd; }
+.spec-row.same .spec-val { color: #424754; }

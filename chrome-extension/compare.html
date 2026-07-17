@@ -12,6 +12,11 @@
   <header>
     <h1>CompareXT</h1>
     <span id="product-count"></span>
+    <span id="enrich-badge">Loading details…</span>
+    <label class="diff-toggle-label">
+      <input type="checkbox" id="diff-toggle">
+      Show differences only
+    </label>
     <button id="clear-all-btn">Clear All</button>
   </header>
   <div id="compare-wrapper">
@@ -22,6 +27,9 @@
     <span>Visit an Amazon product page and click "Add to Compare".</span>
   </div>
   <script src="db.js"></script>
+  <script src="sites/amazon.js"></script>
+  <script src="sites/flipkart.js"></script>
+  <script src="sites.js"></script>
   <script src="compare.js"></script>
 </body>
 </html>
