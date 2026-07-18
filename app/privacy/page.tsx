@@ -5,7 +5,8 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", maxWidth: 720, margin: "40px auto", padding: "0 20px", lineHeight: 1.6, color: "#1a1a1a" }}>
+    <div style={{ background: "#ffffff", minHeight: "100vh" }}>
+    <main style={{ fontFamily: "system-ui, sans-serif", maxWidth: 720, margin: "0 auto", padding: "40px 20px", lineHeight: 1.6, color: "#1a1a1a" }}>
       <h1 style={{ fontSize: 26, marginBottom: 4 }}>CompareXT — Privacy Policy</h1>
       <p style={{ color: "#666", fontSize: 14, marginBottom: 24 }}>Last updated: July 18, 2026</p>
 
@@ -44,5 +45,6 @@ export default function PrivacyPage() {
         CompareXT is not affiliated with, endorsed by, or sponsored by Amazon, Flipkart, or any shopping site it supports.
       </footer>
     </main>
+    </div>
   );
 }
