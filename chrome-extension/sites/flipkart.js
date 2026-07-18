@@ -59,15 +59,22 @@ window.SITE_REGISTRY["flipkart.com"] = {
     // Recommendation-carousel cards are bare <a> tags — grab image/title only;
     // enrichProduct fills price/rating/specs from the product page on compare.
     if (cardEl.matches('a[href]')) {
-      const img = cardEl.querySelector('img');
+      const href = cardEl.getAttribute('href') || '';
+      const img  = cardEl.querySelector('img');
+      const alt  = img && img.getAttribute('alt') ? img.getAttribute('alt').trim() : '';
+      // Flipkart carousels use a generic alt="IMAGE"; fall back to the URL slug
+      // for a readable title (enrichProduct replaces it with the full name later).
+      const slug = (href.match(/\/([^/]+)\/p\/itm/) || [])[1] || '';
+      const title = (alt && !/^image$/i.test(alt))
+        ? alt
+        : slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       return {
-        title:       img && img.getAttribute('alt') ? img.getAttribute('alt').trim()
-                                                     : (cardEl.getAttribute('title') || '').trim(),
+        title,
         image:       img ? img.src : "",
         price:       "",
         rating:      "",
         reviewCount: "",
-        detailPath:  (cardEl.getAttribute('href') || '').split('?')[0] || null,
+        detailPath:  href.split('?')[0] || null,
       };
     }
     // Grid card. Class names may change; update here when Flipkart rotates them
