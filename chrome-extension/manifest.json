@@ -12,7 +12,11 @@
   "host_permissions": [
     "*://*.amazon.in/*",
     "*://*.amazon.com/*",
-    "*://*.flipkart.com/*"
+    "*://*.flipkart.com/*",
+    "*://*.ajio.com/*",
+    "*://*.meesho.com/*",
+    "*://*.myntra.com/*",
+    "*://*.nykaa.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -29,6 +33,30 @@
       "js": ["db.js", "sites/flipkart.js", "sites.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.ajio.com/*"],
+      "js": ["db.js", "sites/ajio.js", "sites.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.meesho.com/*"],
+      "js": ["db.js", "sites/meesho.js", "sites.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.myntra.com/*"],
+      "js": ["db.js", "sites/myntra.js", "sites.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.nykaa.com/*"],
+      "js": ["db.js", "sites/nykaa.js", "sites.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
     }
   ],
   "action": {
@@ -41,7 +69,7 @@
   "web_accessible_resources": [
     {
       "resources": ["compare.html"],
-      "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*", "*://*.flipkart.com/*"]
+      "matches": ["*://*.amazon.in/*", "*://*.amazon.com/*", "*://*.flipkart.com/*", "*://*.ajio.com/*", "*://*.meesho.com/*", "*://*.myntra.com/*", "*://*.nykaa.com/*"]
     }
   ]
 }
