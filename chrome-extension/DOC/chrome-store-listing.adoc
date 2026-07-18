@@ -1,0 +1,151 @@
+= CompareXT — Chrome Web Store Submission
+:toc: left
+:icons: font
+
+Listing copy + deploy steps for publishing CompareXT to the Chrome Web Store.
+Reflects the current branch (Amazon + Flipkart).
+
+== Store Listing
+
+=== Item name (title)
+
+----
+CompareXT — Compare Products Side by Side
+----
+
+NOTE: The store item name comes from `manifest.json` `name` ("CompareXT").
+The line above is the recommended display title (max 75 chars). Update
+`manifest.json` `name` if you want the store to show the full title.
+
+=== Summary (short description)
+
+Max 132 characters. Shown on the store tile and search results.
+
+----
+Add products from Amazon & Flipkart to a floating bar, then compare their
+full spec tables side by side in one click.
+----
+
+=== Detailed description
+
+----
+CompareXT lets you compare products across Amazon and Flipkart without
+juggling browser tabs.
+
+HOW IT WORKS
+• Browse Amazon or Flipkart as usual. An "Add to Compare" button appears
+  on every product card and product page.
+• Add up to 10 products to the floating compare bar.
+• Click COMPARE to open a full-screen comparison: images, prices, ratings,
+  and the complete specification table for every product, side by side.
+• "Show differences only" hides the rows where all products match, so you
+  see what actually sets them apart.
+
+FEATURES
+• Works on Amazon.in, Amazon.com and Flipkart.
+• Pulls the full specification table from each product page automatically.
+• Sticky header and first column keep context while you scroll wide tables.
+• Everything is stored locally in your browser — no account, no sign-in.
+
+PRIVACY
+CompareXT stores your compare list locally on your device using Chrome
+storage. It does not send your data to any server and does not track you.
+
+DISCLOSURE
+Product "buy" links use the Amazon Associates affiliate tag. This does not
+change the price you pay.
+----
+
+=== Category & language
+
+* *Category:* Shopping
+* *Language:* English
+
+=== Required graphic assets
+
+[cols="1,2",options="header"]
+|===
+| Asset | Spec
+| Store icon | 128×128 PNG (already in `icons/icon-128.png`)
+| Screenshot(s) | At least 1; 1280×800 or 640×400 PNG/JPEG. Show the compare
+                  page and the "Add to Compare" button in context.
+| Small promo tile (optional) | 440×280 PNG
+|===
+
+== Privacy & permissions justification
+
+Fill these on the dashboard *Privacy* tab. Review will reject vague answers.
+
+[cols="1,2",options="header"]
+|===
+| Item | Answer
+| Single purpose | "Compare products from supported shopping sites side by side."
+| `storage` permission | "Stores the user's compare list locally on the device."
+| Host permissions (amazon/flipkart) | "Reads product details on supported
+  shopping sites to build the comparison; runs only on those sites."
+| Remote code | "No remote code is used."
+| Data collection | "Does not collect or transmit any user data. All data
+  stays in local browser storage."
+|===
+
+WARNING: Chrome requires a privacy policy URL when you declare host
+permissions. Host a short privacy policy (a public page or gist) and paste
+its URL in the Privacy tab before submitting.
+
+== Deploy steps
+
+You already have a Chrome Web Store developer account, so the one-time
+registration fee is done.
+
+=== 1. Bump the version
+
+Chrome rejects a re-upload with a version already published. Increment
+`manifest.json` `version` for every submission (e.g. `1.0.0` → `1.0.1`).
+
+=== 2. Build the upload ZIP
+
+The ZIP must have `manifest.json` at its *root*. Exclude dev-only files
+(reference HTML, docs, notes) — they bloat the package and can trigger
+review questions.
+
+[source,bash]
+----
+cd chrome-extension
+zip -r ../comparext.zip . \
+  -x 'page-refs/*' -x 'DOC/*' -x '*.md' -x '.DS_Store' -x '*/.DS_Store'
+----
+
+Verify the ZIP contains: `manifest.json`, `background.js`, `db.js`,
+`sites.js`, `sites/*.js`, `content.js`, `content.css`, `compare.*`,
+`popup.*`, `icons/*`.
+
+=== 3. Upload
+
+. Open the developer dashboard: https://chrome.google.com/webstore/devconsole
+. *Add new item* → upload `comparext.zip` (or select an existing item →
+  *Package* → *Upload new package* for an update).
+
+=== 4. Complete the listing
+
+Paste the *title*, *summary*, and *detailed description* from above. Add
+the *category*, *screenshots*, and *store icon*.
+
+=== 5. Complete Privacy tab
+
+Fill the single-purpose description, permission justifications, and data-use
+disclosure from the table above. Add the *privacy policy URL*. Certify that
+the extension complies with the Developer Program Policies.
+
+=== 6. Submit for review
+
+Click *Submit for review*. Review typically takes a few hours to a few days.
+Extensions with broad host permissions may take longer. You get an email on
+approval or rejection (with the reason).
+
+== Update checklist (for future releases)
+
+* [ ] Bump `manifest.json` `version`
+* [ ] Rebuild ZIP (step 2)
+* [ ] Upload new package to the existing item
+* [ ] Update screenshots/description if the UI changed
+* [ ] Re-submit for review
