@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="16" fill="#2563eb"/>
-  <text x="50%" y="54%" font-size="72" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="sans-serif">⇌</text>
+  <rect width="128" height="128" rx="20" fill="#2563eb"/>
+  <!-- Left-pointing arrow (top) -->
+  <path d="M85,44 L38,44 M55,26 L37,44 L55,62" fill="none" stroke="white" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right-pointing arrow (bottom) -->
+  <path d="M43,84 L90,84 M73,66 L91,84 L73,102" fill="none" stroke="white" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
